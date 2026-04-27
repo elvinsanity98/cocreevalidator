@@ -1,0 +1,2871 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Eeejay COCREE Checker — dev by Bongzkie</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Serif:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --ink: #0a1628;
+    --ink-2: #0f1d35;
+    --ink-3: #14253f;
+    --paper: #f4ecd8;
+    --paper-2: #ebe1c8;
+    --gold: #d4a437;
+    --gold-2: #b8862a;
+    --accent: #c9302c;
+    --green: #2d8659;
+    --amber: #e8a93d;
+    --grid: rgba(212, 164, 55, 0.08);
+    --shadow: 0 4px 24px rgba(0, 0, 0, 0.35);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body {
+    background: var(--ink);
+    color: var(--paper);
+    font-family: 'Inter', sans-serif;
+    min-height: 100vh;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  body {
+    background-image:
+      linear-gradient(var(--grid) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+    background-size: 32px 32px;
+    background-attachment: fixed;
+  }
+
+  /* ---------- Header ---------- */
+  header.masthead {
+    background: linear-gradient(180deg, var(--ink-2), var(--ink));
+    border-bottom: 2px solid var(--gold);
+    padding: 22px 40px 18px;
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    box-shadow: var(--shadow);
+  }
+  header.masthead::before {
+    content: "";
+    position: absolute;
+    bottom: -6px;
+    left: 0;
+    right: 0;
+    height: 4px;
+    border-top: 1px solid var(--gold-2);
+    border-bottom: 1px solid var(--gold-2);
+  }
+
+  .brand-row {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+
+  .seal {
+    width: 56px; height: 56px;
+    background: radial-gradient(circle at 35% 30%, #f4d77a, var(--gold-2));
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    font-family: 'IBM Plex Serif', serif;
+    font-weight: 700;
+    color: var(--ink);
+    font-size: 22px;
+    box-shadow: inset 0 0 0 2px var(--ink), 0 0 0 3px var(--gold-2);
+    flex-shrink: 0;
+  }
+
+  .brand-text h1 {
+    font-family: 'IBM Plex Serif', serif;
+    font-weight: 600;
+    font-size: 26px;
+    letter-spacing: 0.5px;
+    color: var(--paper);
+  }
+  .brand-text h1 em {
+    color: var(--gold);
+    font-style: normal;
+    font-weight: 700;
+  }
+  .brand-text .subtitle {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--paper-2);
+    opacity: 0.7;
+    margin-top: 2px;
+  }
+
+  .doc-ref {
+    margin-left: auto;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    text-align: right;
+    color: var(--paper-2);
+    opacity: 0.6;
+    line-height: 1.4;
+  }
+
+  /* ---------- Tabs ---------- */
+  .tabs {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 40px;
+    display: flex;
+    gap: 4px;
+    margin-top: 14px;
+    border-bottom: 1px solid rgba(212, 164, 55, 0.2);
+  }
+  .tab {
+    padding: 10px 22px;
+    background: transparent;
+    border: none;
+    color: var(--paper-2);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    transition: all 0.2s ease;
+    font-weight: 500;
+  }
+  .tab:hover { color: var(--gold); }
+  .tab.active {
+    color: var(--gold);
+    border-bottom-color: var(--gold);
+  }
+
+  /* ---------- Main ---------- */
+  main {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 36px 40px 80px;
+  }
+
+  .panel {
+    background: var(--ink-2);
+    border: 1px solid rgba(212, 164, 55, 0.15);
+    border-radius: 4px;
+    padding: 26px;
+    margin-bottom: 22px;
+    position: relative;
+  }
+  .panel::before {
+    content: "";
+    position: absolute;
+    top: -1px; left: -1px;
+    width: 14px; height: 14px;
+    border-top: 2px solid var(--gold);
+    border-left: 2px solid var(--gold);
+  }
+  .panel::after {
+    content: "";
+    position: absolute;
+    bottom: -1px; right: -1px;
+    width: 14px; height: 14px;
+    border-bottom: 2px solid var(--gold);
+    border-right: 2px solid var(--gold);
+  }
+
+  .panel h2 {
+    font-family: 'IBM Plex Serif', serif;
+    font-size: 20px;
+    color: var(--gold);
+    margin-bottom: 4px;
+    font-weight: 600;
+  }
+  .panel .lede {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--paper-2);
+    opacity: 0.65;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 20px;
+  }
+
+  /* ---------- Drop zone ---------- */
+  .dropzone {
+    border: 2px dashed rgba(212, 164, 55, 0.4);
+    border-radius: 4px;
+    padding: 40px 24px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    background: rgba(0, 0, 0, 0.15);
+  }
+  .dropzone:hover, .dropzone.drag {
+    border-color: var(--gold);
+    background: rgba(212, 164, 55, 0.05);
+  }
+  .dropzone .big {
+    font-family: 'IBM Plex Serif', serif;
+    font-size: 18px;
+    color: var(--paper);
+    margin-bottom: 6px;
+  }
+  .dropzone .small {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--paper-2);
+    opacity: 0.7;
+  }
+  .dropzone input { display: none; }
+
+  /* ---------- Buttons ---------- */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--gold);
+    color: var(--ink);
+    border: none;
+    padding: 11px 22px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    cursor: pointer;
+    border-radius: 2px;
+    transition: all 0.15s ease;
+  }
+  .btn:hover { background: #e8b945; transform: translateY(-1px); }
+  .btn:active { transform: translateY(0); }
+  .btn.ghost {
+    background: transparent;
+    border: 1px solid var(--gold);
+    color: var(--gold);
+  }
+  .btn.ghost:hover { background: rgba(212, 164, 55, 0.1); }
+  .btn.danger { background: var(--accent); color: var(--paper); }
+  .btn.danger:hover { background: #d63b37; }
+
+  .btn-row {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-top: 16px;
+  }
+
+  /* ---------- Stat cards ---------- */
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 10px;
+    margin-bottom: 22px;
+  }
+  .stat {
+    background: var(--ink-3);
+    border-left: 3px solid var(--gold);
+    padding: 14px 18px;
+  }
+  .stat.err { border-left-color: var(--accent); }
+  .stat.ok { border-left-color: var(--green); }
+  .stat.warn { border-left-color: var(--amber); }
+
+  .stat .label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--paper-2);
+    opacity: 0.7;
+  }
+  .stat .value {
+    font-family: 'IBM Plex Serif', serif;
+    font-size: 28px;
+    font-weight: 600;
+    color: var(--paper);
+    margin-top: 2px;
+  }
+  .stat.err .value { color: #ff6b66; }
+  .stat.ok .value { color: #5fc78a; }
+  .stat.warn .value { color: var(--amber); }
+
+  /* ---------- Filters ---------- */
+  .filters {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin: 14px 0;
+    align-items: center;
+  }
+  .chip {
+    background: var(--ink-3);
+    color: var(--paper-2);
+    border: 1px solid rgba(212, 164, 55, 0.2);
+    padding: 6px 14px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    border-radius: 100px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+  .chip:hover { border-color: var(--gold); color: var(--paper); }
+  .chip.active {
+    background: var(--gold);
+    color: var(--ink);
+    border-color: var(--gold);
+    font-weight: 600;
+  }
+  .filters input[type="text"] {
+    background: var(--ink-3);
+    color: var(--paper);
+    border: 1px solid rgba(212, 164, 55, 0.2);
+    padding: 7px 12px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    border-radius: 2px;
+    flex: 1;
+    min-width: 200px;
+  }
+  .filters input[type="text"]:focus { outline: none; border-color: var(--gold); }
+
+  /* ---------- Error list ---------- */
+  .err-list {
+    max-height: 600px;
+    overflow-y: auto;
+    border: 1px solid rgba(212, 164, 55, 0.15);
+    background: var(--ink);
+    border-radius: 2px;
+  }
+  .err-list::-webkit-scrollbar { width: 10px; }
+  .err-list::-webkit-scrollbar-track { background: var(--ink-2); }
+  .err-list::-webkit-scrollbar-thumb { background: var(--gold-2); border-radius: 2px; }
+
+  .err-row {
+    display: grid;
+    grid-template-columns: 60px 80px 90px 1fr;
+    gap: 14px;
+    padding: 12px 16px;
+    border-bottom: 1px solid rgba(212, 164, 55, 0.08);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    align-items: start;
+  }
+  .err-row:hover { background: rgba(212, 164, 55, 0.04); }
+  .err-row .ln {
+    color: var(--paper-2);
+    opacity: 0.6;
+    font-size: 11px;
+  }
+  .err-row .stage {
+    padding: 2px 8px;
+    background: var(--ink-3);
+    border-radius: 2px;
+    font-size: 10px;
+    text-align: center;
+    font-weight: 600;
+    height: fit-content;
+  }
+  .err-row .code {
+    color: var(--gold);
+    font-weight: 600;
+  }
+  .err-row .msg {
+    color: var(--paper);
+    line-height: 1.6;
+  }
+  .err-row .msg .field {
+    color: var(--amber);
+    font-weight: 600;
+  }
+  .err-row .msg .ctx {
+    display: block;
+    color: var(--paper-2);
+    opacity: 0.7;
+    margin-top: 3px;
+    font-size: 11px;
+  }
+  .err-row.severity-error { border-left: 3px solid var(--accent); }
+  .err-row.severity-warning { border-left: 3px solid var(--amber); }
+  .err-row.severity-info { border-left: 3px solid var(--gold); }
+
+  /* ---------- Empty state ---------- */
+  .empty {
+    padding: 60px 30px;
+    text-align: center;
+    color: var(--paper-2);
+    opacity: 0.5;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+  }
+  .empty .ascii {
+    font-size: 36px;
+    margin-bottom: 14px;
+    color: var(--gold);
+    opacity: 0.6;
+  }
+
+  /* ---------- Generator panel ---------- */
+  .gen-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 22px;
+  }
+  @media (max-width: 900px) {
+    .gen-grid { grid-template-columns: 1fr; }
+  }
+
+  .form-group {
+    margin-bottom: 14px;
+  }
+  .form-group label {
+    display: block;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--paper-2);
+    margin-bottom: 5px;
+    opacity: 0.8;
+  }
+  .form-group input,
+  .form-group select {
+    width: 100%;
+    background: var(--ink);
+    color: var(--paper);
+    border: 1px solid rgba(212, 164, 55, 0.2);
+    padding: 9px 12px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    border-radius: 2px;
+  }
+  .form-group input:focus,
+  .form-group select:focus {
+    outline: none;
+    border-color: var(--gold);
+  }
+
+  .checkbox-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+    margin-top: 8px;
+  }
+  .check-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--ink-3);
+    padding: 8px 10px;
+    border-radius: 2px;
+    cursor: pointer;
+    border: 1px solid transparent;
+    transition: border-color 0.15s ease;
+  }
+  .check-item:hover { border-color: rgba(212, 164, 55, 0.4); }
+  .check-item input { margin: 0; cursor: pointer; }
+  .check-item label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--paper);
+    cursor: pointer;
+    margin: 0;
+    text-transform: none;
+    letter-spacing: 0;
+    opacity: 1;
+  }
+
+  .preview {
+    background: var(--ink);
+    border: 1px solid rgba(212, 164, 55, 0.2);
+    border-radius: 2px;
+    padding: 16px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--paper);
+    max-height: 540px;
+    overflow: auto;
+    white-space: pre;
+    line-height: 1.5;
+  }
+  .preview::-webkit-scrollbar { width: 10px; height: 10px; }
+  .preview::-webkit-scrollbar-track { background: var(--ink-2); }
+  .preview::-webkit-scrollbar-thumb { background: var(--gold-2); }
+
+  .xml-tag { color: #79b8e6; }
+  .xml-attr { color: var(--gold); }
+  .xml-val { color: #b6e8a4; }
+
+  /* ---------- Auto-fix changes display ---------- */
+  .fix-banner {
+    background: linear-gradient(90deg, rgba(45, 134, 89, 0.15), rgba(45, 134, 89, 0.05));
+    border-left: 3px solid var(--green);
+    padding: 14px 18px;
+    margin-bottom: 14px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--paper);
+  }
+  .fix-banner strong { color: #5fc78a; }
+  .fix-banner.warn {
+    background: linear-gradient(90deg, rgba(232, 169, 61, 0.15), rgba(232, 169, 61, 0.05));
+    border-left-color: var(--amber);
+  }
+  .fix-banner.warn strong { color: var(--amber); }
+
+  .fix-list {
+    max-height: 380px;
+    overflow-y: auto;
+    border: 1px solid rgba(212, 164, 55, 0.15);
+    background: var(--ink);
+    border-radius: 2px;
+  }
+  .fix-list::-webkit-scrollbar { width: 10px; }
+  .fix-list::-webkit-scrollbar-track { background: var(--ink-2); }
+  .fix-list::-webkit-scrollbar-thumb { background: var(--gold-2); }
+
+  .fix-row {
+    display: grid;
+    grid-template-columns: 60px 90px 1fr;
+    gap: 14px;
+    padding: 10px 16px;
+    border-bottom: 1px solid rgba(212, 164, 55, 0.08);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    align-items: start;
+    border-left: 3px solid var(--green);
+  }
+  .fix-row:hover { background: rgba(45, 134, 89, 0.04); }
+  .fix-row .ln { color: var(--paper-2); opacity: 0.6; }
+  .fix-row .field { color: var(--amber); font-weight: 600; }
+  .fix-row .change { color: var(--paper); line-height: 1.6; }
+  .fix-row .change .from {
+    color: #ff8a85;
+    text-decoration: line-through;
+    opacity: 0.85;
+  }
+  .fix-row .change .arrow { color: var(--paper-2); margin: 0 6px; opacity: 0.5; }
+  .fix-row .change .to { color: #5fc78a; font-weight: 600; }
+  .fix-row .change .reason {
+    display: block;
+    color: var(--paper-2);
+    opacity: 0.65;
+    margin-top: 3px;
+    font-size: 10px;
+  }
+
+  .sandbox-tag {
+    display: inline-block;
+    background: var(--accent);
+    color: var(--paper);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    padding: 2px 8px;
+    border-radius: 2px;
+    text-transform: uppercase;
+    margin-left: 8px;
+    vertical-align: middle;
+  }
+
+  /* ---------- Help / About ---------- */
+  .help-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+    margin-top: 14px;
+  }
+  @media (max-width: 800px) { .help-grid { grid-template-columns: 1fr; } }
+
+  .help-grid h3 {
+    font-family: 'IBM Plex Serif', serif;
+    color: var(--gold);
+    font-size: 15px;
+    margin-bottom: 10px;
+    font-weight: 600;
+  }
+  .help-grid p,
+  .help-grid li {
+    font-size: 13px;
+    color: var(--paper-2);
+    line-height: 1.7;
+  }
+  .help-grid ul, .help-grid ol { padding-left: 20px; margin-bottom: 12px; }
+  .help-grid code {
+    font-family: 'JetBrains Mono', monospace;
+    background: var(--ink-3);
+    color: var(--gold);
+    padding: 2px 6px;
+    font-size: 11px;
+    border-radius: 2px;
+  }
+
+  /* ---------- Footer ---------- */
+  footer {
+    text-align: center;
+    padding: 20px;
+    border-top: 1px solid rgba(212, 164, 55, 0.15);
+    color: var(--paper-2);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    opacity: 0.6;
+  }
+  footer .pulse {
+    display: inline-block;
+    width: 6px; height: 6px;
+    background: var(--green);
+    border-radius: 50%;
+    margin-right: 6px;
+    animation: pulse 2s infinite;
+    vertical-align: middle;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+  }
+
+  .hidden { display: none !important; }
+
+  /* Toast */
+  .toast {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    background: var(--ink-3);
+    color: var(--paper);
+    padding: 12px 20px;
+    border-left: 3px solid var(--gold);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    z-index: 100;
+    box-shadow: var(--shadow);
+    animation: slideIn 0.25s ease;
+  }
+  @keyframes slideIn {
+    from { transform: translateX(20px); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+  }
+</style>
+</head>
+<body>
+
+<header class="masthead">
+  <div class="brand-row">
+    <div class="seal">EJ</div>
+    <div class="brand-text">
+      <h1>Eeejay <em>COCREE</em> Checker</h1>
+      <div class="subtitle">COCREE 2.0 Validator &amp; Sandbox Generator · dev by Bongzkie</div>
+    </div>
+    <div class="doc-ref">
+      Ref. CSP-007-v002<br/>
+      Stage 1 / 2 / 3 rules
+    </div>
+  </div>
+  <div class="tabs">
+    <button class="tab active" data-tab="validator">▣ Validator</button>
+    <button class="tab" data-tab="generator">⬢ Sandbox Generator</button>
+    <button class="tab" data-tab="help">? Guide &amp; Errors</button>
+  </div>
+</header>
+
+<main>
+
+  <!-- =================================================================
+       VALIDATOR TAB
+       ================================================================= -->
+  <section id="tab-validator" class="tab-pane">
+    <div class="panel">
+      <h2>Submission Input File · Validator</h2>
+      <div class="lede">// upload .xml or .txt — runs Stage 1, 2, 3 checks</div>
+
+      <label for="fileInput" class="dropzone" id="dropzone">
+        <input type="file" id="fileInput" accept=".xml,.txt" />
+        <div class="big" id="dzText">Drop COCREE 2.0 file here</div>
+        <div class="small" id="dzSub">or click to browse · accepts .xml, .txt (UTF-8)</div>
+      </label>
+
+      <div class="btn-row">
+        <button class="btn" id="btnValidate" disabled>▶ Run Validation</button>
+        <button class="btn danger" id="btnAutoFix" disabled>⚒ Auto-Fix &amp; Download<span class="sandbox-tag">Sandbox</span></button>
+        <button class="btn ghost" id="btnLoadSample">↻ Load Sample File</button>
+        <button class="btn ghost" id="btnExportErrors" disabled>⬇ Export Error Report</button>
+        <button class="btn ghost" id="btnClear">✕ Clear</button>
+      </div>
+    </div>
+
+    <div id="resultsArea" class="hidden">
+      <div class="stats">
+        <div class="stat">
+          <div class="label">File</div>
+          <div class="value" id="stFile" style="font-size:14px; word-break:break-all;">—</div>
+        </div>
+        <div class="stat">
+          <div class="label">Records</div>
+          <div class="value" id="stRecords">0</div>
+        </div>
+        <div class="stat err">
+          <div class="label">Errors</div>
+          <div class="value" id="stErrors">0</div>
+        </div>
+        <div class="stat warn">
+          <div class="label">Warnings</div>
+          <div class="value" id="stWarnings">0</div>
+        </div>
+        <div class="stat ok">
+          <div class="label">Status</div>
+          <div class="value" id="stStatus" style="font-size:18px;">—</div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <h2>Validation Findings</h2>
+        <div class="lede">// each finding shows line / record-type / field / error code / message</div>
+
+        <div class="filters">
+          <button class="chip active" data-filter="all">All</button>
+          <button class="chip" data-filter="stage1">Stage 1 — Structure</button>
+          <button class="chip" data-filter="stage2">Stage 2 — Business Rules</button>
+          <button class="chip" data-filter="stage3">Stage 3 — Loading</button>
+          <button class="chip" data-filter="error">Errors only</button>
+          <button class="chip" data-filter="warning">Warnings</button>
+          <input type="text" id="errSearch" placeholder="search field, error code, message…" />
+        </div>
+
+        <div class="err-list" id="errList">
+          <div class="empty">
+            <div class="ascii">▦</div>
+            <div>No findings yet — upload a file and click Run Validation</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel hidden" id="fixPanel">
+        <h2>Auto-Fix Results <span class="sandbox-tag">Sandbox Only</span></h2>
+        <div class="lede">// fields filled / corrected so the file passes mandatory + dependency rules</div>
+
+        <div class="fix-banner" id="fixBanner">—</div>
+
+        <div class="btn-row" style="margin-bottom:14px; margin-top:0;">
+          <button class="btn" id="btnDownloadFixed">⬇ Download Corrected XML</button>
+          <button class="btn ghost" id="btnDownloadFixedTxt">⬇ Download as TXT</button>
+          <button class="btn ghost" id="btnRevalidate">▶ Re-validate Fixed File</button>
+          <button class="btn ghost" id="btnViewFixedFile">⛶ Preview Fixed File</button>
+        </div>
+
+        <div class="fix-list" id="fixList"></div>
+
+        <div class="preview hidden" id="fixedPreview" style="margin-top:14px;"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =================================================================
+       GENERATOR TAB
+       ================================================================= -->
+  <section id="tab-generator" class="tab-pane hidden">
+    <div class="panel">
+      <h2>Sandbox Auto-Fill Generator</h2>
+      <div class="lede">// generates compliant sample data for mandatory + dependent fields · sandbox use only</div>
+
+      <div class="gen-grid">
+        <!-- Left: Controls -->
+        <div>
+          <div class="form-group">
+            <label>Provider Code (10 digits)</label>
+            <input type="text" id="genProvider" value="BSP0000006" maxlength="10" />
+          </div>
+          <div class="form-group">
+            <label>File Reference Date (YYYYMMDD)</label>
+            <input type="text" id="genRefDate" maxlength="8" />
+          </div>
+          <div class="form-group">
+            <label>Branch Code</label>
+            <input type="text" id="genBranch" value="B0001" />
+          </div>
+          <div class="form-group">
+            <label>Submission Type</label>
+            <select id="genSubType">
+              <option value="0">0 — Standard</option>
+              <option value="1">1 — Correction</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Output Format</label>
+            <select id="genFormat">
+              <option value="xml">XML</option>
+              <option value="txt">TXT (pipe-delimited)</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Records to Generate</label>
+            <div class="checkbox-grid">
+              <div class="check-item"><input type="checkbox" id="g_ID" checked /><label for="g_ID">ID — Individual Subject</label></div>
+              <div class="check-item"><input type="checkbox" id="g_BD" /><label for="g_BD">BD — Company Subject</label></div>
+              <div class="check-item"><input type="checkbox" id="g_CI" checked /><label for="g_CI">CI — Installment Loan</label></div>
+              <div class="check-item"><input type="checkbox" id="g_CN" /><label for="g_CN">CN — Non-Installment</label></div>
+              <div class="check-item"><input type="checkbox" id="g_CC" /><label for="g_CC">CC — Credit Card</label></div>
+              <div class="check-item"><input type="checkbox" id="g_CA" /><label for="g_CA">CA — Other Credit Acc.</label></div>
+              <div class="check-item"><input type="checkbox" id="g_CV" /><label for="g_CV">CV — Investment</label></div>
+              <div class="check-item"><input type="checkbox" id="g_CF" /><label for="g_CF">CF — Off-Balance Sheet</label></div>
+              <div class="check-item"><input type="checkbox" id="g_NE" /><label for="g_NE">NE — Negative Event</label></div>
+              <div class="check-item"><input type="checkbox" id="g_SL" /><label for="g_SL">SL — Company Link</label></div>
+            </div>
+          </div>
+
+          <div class="btn-row">
+            <button class="btn" id="btnGenerate">⚙ Generate Sample</button>
+            <button class="btn ghost" id="btnDownloadGen">⬇ Download File</button>
+            <button class="btn ghost" id="btnCopyGen">⧉ Copy</button>
+            <button class="btn ghost" id="btnSendToValidator">↗ Send to Validator</button>
+          </div>
+        </div>
+
+        <!-- Right: Preview -->
+        <div>
+          <label style="font-family:'JetBrains Mono',monospace; font-size:10px; text-transform:uppercase; letter-spacing:1.5px; color:var(--paper-2); opacity:0.8; display:block; margin-bottom:5px;">Preview</label>
+          <div class="preview" id="genPreview">// click Generate Sample to produce file...</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =================================================================
+       HELP TAB
+       ================================================================= -->
+  <section id="tab-help" class="tab-pane hidden">
+    <div class="panel">
+      <h2>How to Use This Tool</h2>
+      <div class="lede">// a quick guide for COCREE 2.0 submitters</div>
+
+      <div class="help-grid">
+        <div>
+          <h3>▣ Validator</h3>
+          <ol>
+            <li>Upload the unencrypted, decompressed <code>.xml</code> or <code>.txt</code> COCREE 2.0 file.</li>
+            <li>Click <strong>Run Validation</strong>. The tool simulates Stage 1 (Structure), Stage 2 (Business Rules), and Stage 3 (Loading-phase / duplicates) checks.</li>
+            <li>Each finding shows: <strong>Line/Record · Stage · Error Code · Field</strong> + the offending value.</li>
+            <li>Filter findings by stage, severity, or search by field/code, then export the report.</li>
+          </ol>
+          <p><strong>Note:</strong> This is an offline pre-submission checker. It does not submit to BSP BRMS. Always run the official validation after.</p>
+        </div>
+        <div>
+          <h3>⚒ Auto-Fix &amp; Download <span style="color:var(--accent); font-size:10px; letter-spacing:1.5px;">SANDBOX</span></h3>
+          <ol>
+            <li>After running validation, click <strong>Auto-Fix &amp; Download</strong>.</li>
+            <li>The tool repairs <strong>only mandatory and dependency-driven errors</strong>: missing required fields, invalid domain values, malformed dates, bad TIN format, length issues, negative amounts, duplicate IDs, broken cross-references, and recalculates Header/Footer counts.</li>
+            <li>Optional/business-content fields are left untouched.</li>
+            <li>Review the change log, preview the corrected file, then download as <code>.xml</code> or <code>.txt</code>.</li>
+            <li>Use <strong>Re-validate</strong> to confirm the fixed file passes.</li>
+          </ol>
+          <p style="color:var(--accent);"><strong>⚠ Sandbox only.</strong> Autofilled placeholder values must never be submitted as live regulatory data.</p>
+        </div>
+      </div>
+
+      <div class="help-grid" style="margin-top:24px;">
+        <div>
+          <h3>⬢ Sandbox Generator</h3>
+          <ol>
+            <li>Set Provider Code, File Reference Date, Branch.</li>
+            <li>Tick which record types to generate.</li>
+            <li>Click <strong>Generate Sample</strong>. The tool fills <em>all mandatory and dependency-driven fields</em> with valid domain values.</li>
+            <li>Use <strong>Send to Validator</strong> to immediately re-check the generated file.</li>
+          </ol>
+          <p><strong>Sandbox only.</strong> Do not submit auto-filled data as live regulatory reports.</p>
+        </div>
+        <div>
+          <h3>What gets auto-fixed</h3>
+          <ul>
+            <li>Missing mandatory fields → filled with valid sample values</li>
+            <li>Invalid domain values (Gender, Currency, ContractType, etc.) → replaced with valid one</li>
+            <li>Bad date formats → reformatted to YYYYMMDD when salvageable</li>
+            <li>Invalid/short TIN → generated 12-digit numeric TIN</li>
+            <li>ProviderCode length ≠ 10 → padded/synced with Header</li>
+            <li>Negative amounts where not allowed → flipped positive</li>
+            <li>StartDate &gt; PlannedEndDate → PlannedEndDate pushed +5 yrs</li>
+            <li>Duplicate ProviderSubjectNumber → suffix added</li>
+            <li>Contract pointing to missing subject → re-pointed to existing subject</li>
+            <li>Header/Footer record counts → recalculated</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="help-grid" style="margin-top:24px;">
+        <div>
+          <h3>Common Stage 1 errors covered</h3>
+          <ul>
+            <li><code>30-002</code> Filename format invalid</li>
+            <li><code>30-006</code> Provider Code mismatch in file vs filename</li>
+            <li><code>30-007</code> File Reference Date invalid / future-dated</li>
+            <li><code>30-008</code> Number of records mismatch with footer</li>
+            <li><code>30-009</code> Invalid Record Type</li>
+            <li><code>30-013/014</code> Header / Footer missing</li>
+            <li><code>30-015</code> Version or Submission Type missing/invalid</li>
+            <li><code>30-019</code> Header vs Footer FileReferenceDate mismatch</li>
+            <li><code>30-022</code> Provider Subject No. missing</li>
+            <li><code>30-024</code> Provider Contract No. missing</li>
+            <li><code>40-005</code> Filename of zip vs inner file mismatch</li>
+          </ul>
+        </div>
+        <div>
+          <h3>Common Stage 2 errors covered</h3>
+          <ul>
+            <li><code>10-005</code> Date of Birth format</li>
+            <li><code>10-022</code> Contract Type not in domain</li>
+            <li><code>10-028</code> Original Currency invalid</li>
+            <li><code>10-102</code> Contract Phase invalid</li>
+            <li><code>10-150–155</code> Mandatory contract fields</li>
+            <li><code>20-001 to 20-020</code> Mandatory subject fields (Gender, Names, TIN, etc.)</li>
+            <li><code>20-040 / 20-041 / 20-042</code> Nationality / Resident / Civil Status</li>
+            <li><code>20-050</code> TIN length 9–12 digits</li>
+            <li><code>20-051 / 20-052</code> SSS / GSIS length</li>
+            <li><code>20-200+</code> Negative-value checks</li>
+            <li><code>10-251 / 10-252</code> Contract phase vs start/end date</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="help-grid" style="margin-top:24px;">
+        <div>
+          <h3>Stage 3 (Loading) checks</h3>
+          <ul>
+            <li><code>10-090</code> Duplicate ProviderSubjectNo across subjects</li>
+            <li><code>20-310</code> Duplicate ProviderContractNo + RefDate</li>
+            <li><code>10-307</code> Contract references a subject that doesn't exist in file</li>
+            <li><code>10-309</code> Same subject linked twice to a contract</li>
+            <li><code>10-318</code> Company Link parent or child not in file</li>
+            <li><code>10-320</code> Company Link parent == child</li>
+          </ul>
+        </div>
+        <div>
+          <h3>About</h3>
+          <p><strong>Eeejay COCREE Checker</strong> is an unofficial pre-submission validator built on top of the BSP COCREE 2.0 Validation User Guide (CSP-004-v002), Appendix VUG-1, VUG-2, VUG-3.</p>
+          <p>Built by <strong>Bongzkie</strong> · Davao Region, PH.</p>
+          <p style="margin-top:10px; font-size:11px; opacity:0.6;">Not affiliated with Bangko Sentral ng Pilipinas. Use as a development aid; final compliance must be confirmed via the official BSP BRMS portal.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <span class="pulse"></span>
+  Eeejay COCREE Checker · v1.0 · dev by Bongzkie · all checks run locally in your browser
+</footer>
+
+<script>
+/* =====================================================================
+   DOMAIN VALUES — extracted from COCREE 2.0 Data Dictionary
+   ===================================================================== */
+const DOMAINS = {
+  RoleDomain: ['B', 'C', 'G'],                                         // Borrower, Co-Borrower, Guarantor
+  GenderDomain: ['M', 'F'],
+  CivilStatusDomain: ['1','2','3','4','5','6'],                        // Single, Married, Widowed, etc.
+  ResidentTypeDomain: ['1','2'],                                       // Resident, Non-resident
+  ContractTypeDomain: ['11','12','13','14','15','16','17','21','22','23','24','25','26','27','31','32','33','34','35'],
+  ContractPhaseDomain: ['RE','AC','CL','CA'],                          // Requested, Active, Closed, Closed in Advance
+  ContractStatusDomain: ['NN','PA','PD','LC','RS','WR','LE'],
+  CurrencyDomain: ['PHP','USD','EUR','JPY','GBP','AUD','CAD','CHF','CNY','HKD','SGD','THB','KRW','MYR','IDR'],
+  PaymentPeriodicityDomain: ['M','Q','S','Y','D','W','B','I','O'],
+  PaymentMethodDomain: ['CAD','CSH','CHK','PDC','ATM','SAL','OTH'],
+  RestructuredCreditDomain: ['1','2','3'],
+  GuaranteesDomain: ['REM','REC','RET','REL','REI','PEC','PEI','PEG','PER','PEO','REO','REP'],
+  GuaranteeCustomerTypeDomain: ['1','2','3','4'],
+  IDTypeDomain: ['10','11','12','13','14','15','16','17','18','19','20','21','22','23','24','25','30','31','32','33','34','35'],
+  IdentificationTypeDomain: ['TIN','SSS','GSIS'],
+  ContactTypeDomain: ['1','2','3','4','5','6','7','8'],
+  CountryDomain: ['PH','US','CN','JP','SG','HK','MY','TH','ID','KR','GB','AU','CA','DE','FR','IT','ES','IN','VN','TW','AE','SA'],
+  TitleDomain: ['10','20','30','40','50','60'],
+  HouseOwnerLesseeTypeDomain: ['1','2','3','4'],
+  PSGCDomain: ['203108000','133900000','137401000','137404000'],       // representative samples
+  AnnualMonthlyDomain: ['A','M','Y'],
+  PSICDomain: ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U'],
+  OccupationStatusDomain: ['1','2','3','4','5','6','7'],
+  LegalFormDomain: ['10','20','30','40','50','60','70','80'],
+  FirmSizeDomain: ['1','2','3','4'],
+  ConglomerateDomain: ['Y','N','N/A'],
+  YesNoDomain: ['0','1','Y','N'],
+  DOSRIIndicatorDomain: ['0','1'],
+  RPTIndicatorDomain: ['0','1'],
+  RegulatoryStatusDomain: ['CR','PD','NP','RS','LC'],
+  TransactionTypeDomain: ['NA','NW','RN','RS','RF'],
+  CreditPurposeDomain: ['10','20','30','40','50','60','70','80','90'],
+  BookTypeDomain: ['B','T','I'],
+  BookCodeDomain: ['10','11','12','20','21','22'],
+  TrustTypeDomain: ['1','2','3','4'],
+  StageOfImpairmentDomain: ['1','2','3'],
+  CreditClassificationDomain: ['1','2','3','4','5','6'],
+  InterestSettingDomain: ['1','2','3'],
+  FrequencyOfRepricingDomain: ['1','2','3','4','5','6'],
+  GoodTypeDomain: ['1','2','3','4','5','6','7','8','9'],
+  NewUsedDomain: ['N','U'],
+  InstallmentTypeDomain: ['F','V','R'],
+  MinPaymentIndicatorDomain: ['0','1'],
+  CardPremiumDomain: ['0','1'],
+  SubjectInfoTypeDomain: ['U','D','S','B','F','L','C'],
+  NegativeEventStatusDomain: ['AC','CL','PE'],
+  SubmissionTypeDomain: ['0','1'],
+  CompanyRoleDomain: ['D','S','P','O','M'],
+  OtherCreditAccTypeDomain: ['1001','2001','3001','4001','5001'],
+  ContingentAccountTypeDomain: ['A','B','C','D','E','F'],
+  InvestmentType: ['B','S','M','F','D','E','O'],
+  CreditRatingAgencyDomain: ['M','S','F','P','O'],
+  CreditRatingDomain: ['1','2','3','4','5','6','7','8','9','10'],
+  InvestmentIssuerTypeDomain: ['1','2','3','4','5','6','7','8','9','10'],
+  NatureofOfferingDomain: ['PO','PP','OL']
+};
+
+/* =====================================================================
+   FIELD METADATA — record-type → mandatory fields & validation rules
+   Position codes (CI10, ID5...) come from the COCREE 2.0 Data Dictionary.
+   ===================================================================== */
+const RECORD_DEFS = {
+  Header: {
+    code: 'HD',
+    fields: {
+      ProviderCode: { mandatory: true, length: 10, dd: 'HD2' },
+      FileReferenceDate: { mandatory: true, type: 'date', dd: 'HD3' },
+      Version: { mandatory: true, dd: 'HD4' },
+      SubmissionType: { mandatory: true, domain: 'SubmissionTypeDomain', dd: 'HD5' },
+      TotalSubjectRecords: { mandatory: true, type: 'integer', dd: 'HD6' },
+      TotalContractRecords: { mandatory: true, type: 'integer', dd: 'HD7' },
+      TotalNegativeEventRecords: { mandatory: true, type: 'integer', dd: 'HD8' }
+    }
+  },
+  Footer: {
+    code: 'FT',
+    fields: {
+      ProviderCode: { mandatory: true, length: 10, dd: 'FT2' },
+      FileReferenceDate: { mandatory: true, type: 'date', dd: 'FT3' },
+      NumberOfRecords: { mandatory: true, type: 'integer', dd: 'FT4' }
+    }
+  },
+  Individuals: {
+    code: 'ID',
+    fields: {
+      ProviderCode: { mandatory: true, length: 10, dd: 'ID2' },
+      BranchCode: { mandatory: true, dd: 'ID3' },
+      SubjectReferenceDate: { mandatory: true, type: 'date', dd: 'ID4', errCode: '10-109' },
+      ProviderSubjectNumber: { mandatory: true, dd: 'ID5', errCode: '10-120' },
+      FirstName: { mandatory: 'cond:fullname', dd: 'ID7', errCode: '20-002', maxLen: 70 },
+      LastName: { mandatory: 'cond:fullname', dd: 'ID8', errCode: '20-003', maxLen: 70 },
+      Gender: { mandatory: true, domain: 'GenderDomain', dd: 'ID13', errCode: '20-001' },
+      BirthDate: { mandatory: true, type: 'date', minDate: '19000101', dd: 'ID14', errCode: '20-004' },
+      BirthPlace: { mandatory: true, dd: 'ID15', errCode: '20-015', maxLen: 50 },
+      BirthCountry: { mandatory: true, domain: 'CountryDomain', dd: 'ID16', errCode: '20-016' },
+      Nationality: { mandatory: true, domain: 'CountryDomain', dd: 'ID17', errCode: '20-008' },
+      Resident: { mandatory: true, domain: 'ResidentTypeDomain', dd: 'ID18', errCode: '20-010' },
+      CivilStatus: { mandatory: true, domain: 'CivilStatusDomain', dd: 'ID19', errCode: '20-011' },
+      MotherMaidenFullName: { mandatory: true, dd: 'ID22', errCode: '20-013', maxLen: 70 },
+      TIN: { mandatory: 'cond:tin', dd: 'ID39', errCode: '20-020', tinFormat: true }
+    }
+  },
+  Companies: {
+    code: 'BD',
+    fields: {
+      ProviderCode: { mandatory: true, length: 10, dd: 'BD2' },
+      BranchCode: { mandatory: true, dd: 'BD3' },
+      SubjectReferenceDate: { mandatory: true, type: 'date', dd: 'BD4' },
+      ProviderSubjectNumber: { mandatory: true, dd: 'BD5', errCode: '10-120' },
+      TradeName: { mandatory: true, dd: 'BD6', errCode: '10-032', maxLen: 70 },
+      OfficialRegisteredTradeName: { mandatory: true, dd: 'BD7', errCode: '20-030' },
+      Nationality: { mandatory: true, domain: 'CountryDomain', dd: 'BD8' },
+      Resident: { mandatory: true, domain: 'ResidentTypeDomain', dd: 'BD9' },
+      LegalForm: { mandatory: true, domain: 'LegalFormDomain', dd: 'BD10', errCode: '20-121' },
+      FirmSize: { mandatory: true, domain: 'FirmSizeDomain', dd: 'BD15', errCode: '20-049' },
+      TIN: { mandatory: true, dd: 'BD28', tinFormat: true }
+    }
+  },
+  Installments: {
+    code: 'CI',
+    fields: {
+      ProviderCode: { mandatory: true, length: 10, dd: 'CI2' },
+      BranchCode: { mandatory: true, dd: 'CI3' },
+      ContractRefDate: { mandatory: true, type: 'date', dd: 'CI4', errCode: '10-150' },
+      ProviderSubjectNo: { mandatory: true, dd: 'CI5' },
+      Role: { mandatory: true, domain: 'RoleDomain', dd: 'CI6', errCode: '10-152' },
+      DOSRI: { mandatory: 'cond:active', domain: 'DOSRIIndicatorDomain', dd: 'CI7', errCode: '20-232' },
+      RPT: { mandatory: 'cond:active', domain: 'RPTIndicatorDomain', dd: 'CI8' },
+      ProviderContractNo: { mandatory: true, dd: 'CI9', errCode: '10-151' },
+      ContractType: { mandatory: true, domain: 'ContractTypeDomain', dd: 'CI10', errCode: '10-023' },
+      ContractPhase: { mandatory: true, domain: 'ContractPhaseDomain', dd: 'CI11', errCode: '10-024' },
+      RegulatoryStatus: { mandatory: true, domain: 'RegulatoryStatusDomain', dd: 'CI13', errCode: '20-077' },
+      OriginalCurrency: { mandatory: true, domain: 'CurrencyDomain', dd: 'CI14', errCode: '10-027' },
+      ContractStartDate: { mandatory: 'cond:phaseACCLCA', type: 'date', dd: 'CI15', errCode: '10-251' },
+      BookType: { mandatory: true, domain: 'BookTypeDomain', dd: 'CI22', errCode: '20-079' },
+      FinancedAmount: { mandatory: true, type: 'number', minVal: 0, dd: 'CI25', errCode: '10-161' },
+      FinancedAmountOriginalCurrency: { mandatory: true, type: 'number', minVal: 0, dd: 'CI26', errCode: '20-154' },
+      InstallmentsNumber: { mandatory: true, type: 'integer', minVal: 0, dd: 'CI27', errCode: '10-030' },
+      CreditPurpose: { mandatory: true, dd: 'CI29', errCode: '20-157' },
+      PaymentPeriodicity: { mandatory: true, domain: 'PaymentPeriodicityDomain', dd: 'CI31', errCode: '10-163' }
+    }
+  },
+  NonInstallments: {
+    code: 'CN',
+    fields: {
+      ProviderCode: { mandatory: true, length: 10, dd: 'CN2' },
+      BranchCode: { mandatory: true, dd: 'CN3' },
+      ContractRefDate: { mandatory: true, type: 'date', dd: 'CN4', errCode: '10-150' },
+      ProviderSubjectNo: { mandatory: true, dd: 'CN5' },
+      Role: { mandatory: true, domain: 'RoleDomain', dd: 'CN6' },
+      ProviderContractNo: { mandatory: true, dd: 'CN9', errCode: '10-151' },
+      ContractType: { mandatory: true, domain: 'ContractTypeDomain', dd: 'CN10' },
+      ContractPhase: { mandatory: true, domain: 'ContractPhaseDomain', dd: 'CN11' },
+      OriginalCurrency: { mandatory: true, domain: 'CurrencyDomain', dd: 'CN14' },
+      CreditLimitOriginalCurrency: { mandatory: true, type: 'number', dd: 'CN26', errCode: '20-159' },
+      BookType: { mandatory: true, domain: 'BookTypeDomain', dd: 'CN22' }
+    }
+  },
+  CreditCards: {
+    code: 'CC',
+    fields: {
+      ProviderCode: { mandatory: true, length: 10, dd: 'CC2' },
+      BranchCode: { mandatory: true, dd: 'CC3' },
+      ContractRefDate: { mandatory: true, type: 'date', dd: 'CC4' },
+      ProviderSubjectNo: { mandatory: true, dd: 'CC5' },
+      Role: { mandatory: true, domain: 'RoleDomain', dd: 'CC6' },
+      ProviderContractNo: { mandatory: true, dd: 'CC9' },
+      ContractType: { mandatory: true, domain: 'ContractTypeDomain', dd: 'CC10' },
+      ContractPhase: { mandatory: true, domain: 'ContractPhaseDomain', dd: 'CC11' },
+      ContractStatus: { mandatory: true, domain: 'ContractStatusDomain', dd: 'CC12', errCode: '10-153' },
+      OriginalCurrency: { mandatory: true, domain: 'CurrencyDomain', dd: 'CC14' },
+      BookType: { mandatory: true, domain: 'BookTypeDomain', dd: 'CC21' },
+      CreditLimit: { mandatory: true, type: 'number', minVal: 0, dd: 'CC22', errCode: '10-031' },
+      CreditLimitOriginalCurrency: { mandatory: true, type: 'number', dd: 'CC23' },
+      InstallmentType: { mandatory: 'cond:cc', domain: 'InstallmentTypeDomain', dd: 'CC38', errCode: '10-275' },
+      PaymentPeriodicity: { mandatory: 'cond:cc', domain: 'PaymentPeriodicityDomain', dd: 'CC26', errCode: '10-276' }
+    }
+  },
+  OtherCreditAccomodations: {
+    code: 'CA',
+    fields: {
+      ProviderCode: { mandatory: true, length: 10, dd: 'CA2' },
+      ContractRefDate: { mandatory: true, type: 'date', dd: 'CA4' },
+      ProviderSubjectNo: { mandatory: true, dd: 'CA5' },
+      Role: { mandatory: true, domain: 'RoleDomain', dd: 'CA6' },
+      ProviderContractNo: { mandatory: true, dd: 'CA9' },
+      BookType: { mandatory: true, domain: 'BookTypeDomain', dd: 'CA10' },
+      OtherCreditAccType: { mandatory: true, domain: 'OtherCreditAccTypeDomain', dd: 'CA11', errCode: '20-162' },
+      GrantDate: { mandatory: true, type: 'date', dd: 'CA12', errCode: '20-163' },
+      MaturityDate: { mandatory: true, type: 'date', dd: 'CA13', errCode: '20-248' },
+      OriginalCurrency: { mandatory: true, domain: 'CurrencyDomain', dd: 'CA15', errCode: '10-154' },
+      AmountGrantedOriginalCurrency: { mandatory: true, type: 'number', minVal: 0, dd: 'CA18', errCode: '20-165' },
+      AmountGranted: { mandatory: true, type: 'number', minVal: 0, dd: 'CA19', errCode: '20-166' },
+      OutstandingBalanceOriginalCurrency: { mandatory: true, type: 'number', minVal: 0, dd: 'CA20', errCode: '20-167' },
+      OutstandingBalance: { mandatory: true, type: 'number', minVal: 0, dd: 'CA21', errCode: '20-168' },
+      DaysPastDue: { mandatory: true, type: 'integer', dd: 'CA34', errCode: '20-169' }
+    }
+  },
+  Investments: {
+    code: 'CV',
+    fields: {
+      ProviderCode: { mandatory: true, length: 10, dd: 'CV2' },
+      ContractRefDate: { mandatory: true, type: 'date', dd: 'CV4' },
+      ProviderSubjectNo: { mandatory: true, dd: 'CV5' },
+      Role: { mandatory: true, domain: 'RoleDomain', dd: 'CV6' },
+      ProviderContractNo: { mandatory: true, dd: 'CV9' },
+      BookType: { mandatory: true, domain: 'BookTypeDomain', dd: 'CV10' },
+      BookCode: { mandatory: true, dd: 'CV11', errCode: '20-178' },
+      TrustType: { mandatory: true, domain: 'TrustTypeDomain', dd: 'CV12', errCode: '20-179' },
+      InvestmentType: { mandatory: true, domain: 'InvestmentType', dd: 'CV13', errCode: '20-180' },
+      GrantDate: { mandatory: true, type: 'date', dd: 'CV14' },
+      MaturityDate: { mandatory: true, type: 'date', dd: 'CV15' },
+      AmountGrantedOriginalCurrency: { mandatory: true, type: 'number', dd: 'CV17' },
+      AmountGranted: { mandatory: true, type: 'number', dd: 'CV18' },
+      AccumulatedMarketGainsOriginalCurrency: { mandatory: true, type: 'number', dd: 'CV19', errCode: '20-181' },
+      AccumulatedMarketGains: { mandatory: true, type: 'number', dd: 'CV20', errCode: '20-182' }
+    }
+  },
+  OffBalanceSheets: {
+    code: 'CF',
+    fields: {
+      ProviderCode: { mandatory: true, length: 10, dd: 'CF2' },
+      ContractRefDate: { mandatory: true, type: 'date', dd: 'CF4' },
+      ProviderSubjectNo: { mandatory: true, dd: 'CF5' },
+      Role: { mandatory: true, domain: 'RoleDomain', dd: 'CF6' },
+      ProviderContractNo: { mandatory: true, dd: 'CF9' },
+      ContingentAccountType: { mandatory: true, domain: 'ContingentAccountTypeDomain', dd: 'CF10', errCode: '20-192' },
+      OriginalCurrency: { mandatory: true, domain: 'CurrencyDomain', dd: 'CF11' },
+      OutstandingBalanceOriginalCurrency: { mandatory: true, type: 'number', dd: 'CF12', errCode: '20-167' },
+      OutstandingBalance: { mandatory: true, type: 'number', dd: 'CF13', errCode: '20-168' }
+    }
+  },
+  SubjectNegativeEvents: {
+    code: 'NE',
+    fields: {
+      ProviderCode: { mandatory: true, length: 10, dd: 'NE2' },
+      NegativeEventRefDate: { mandatory: true, type: 'date', dd: 'NE4', errCode: '10-198' },
+      ProviderSubjectNo: { mandatory: true, dd: 'NE5' },
+      EventCode: { mandatory: true, domain: 'SubjectInfoTypeDomain', dd: 'NE6', errCode: '10-200' }
+    }
+  },
+  CompanyLinks: {
+    code: 'SL',
+    fields: {
+      ProviderCode: { mandatory: true, length: 10, dd: 'SL2', errCode: '10-117' },
+      CompanyLinkRefDate: { mandatory: true, type: 'date', dd: 'SL4', errCode: '10-204' },
+      ParentProviderSubjectNo: { mandatory: true, dd: 'SL5', errCode: '10-209' },
+      CompanyRole: { mandatory: true, domain: 'CompanyRoleDomain', dd: 'SL6', errCode: '10-208' },
+      ChildProviderSubjectNo: { mandatory: true, dd: 'SL7', errCode: '10-206' }
+    }
+  }
+};
+
+/* TXT-mode field order — for parsing/generating pipe-delimited TXT */
+const TXT_ORDER = {
+  HD: ['RecordType','ProviderCode','FileReferenceDate','Version','SubmissionType','TotalSubjectRecords','TotalContractRecords','TotalNegativeEventRecords','ProviderComments'],
+  FT: ['RecordType','ProviderCode','FileReferenceDate','NumberOfRecords']
+};
+
+/* =====================================================================
+   STATE
+   ===================================================================== */
+let CURRENT_FILE = null;
+let CURRENT_TEXT = '';
+let CURRENT_RECORDS = [];        // [{ recordType, line, attrs:{}, raw }]
+let CURRENT_FINDINGS = [];       // [{ stage, severity, code, line, recordType, field, message, value }]
+let CURRENT_FILTER = 'all';
+let CURRENT_SEARCH = '';
+let GENERATED_OUTPUT = '';
+let GENERATED_FILENAME = '';
+let FIXED_OUTPUT = '';
+let FIXED_FILENAME = '';
+let FIX_CHANGES = [];
+
+/* =====================================================================
+   UTILITIES
+   ===================================================================== */
+function $(sel) { return document.querySelector(sel); }
+function $$(sel) { return Array.from(document.querySelectorAll(sel)); }
+
+function todayYMD() {
+  const d = new Date();
+  return d.getFullYear() + String(d.getMonth() + 1).padStart(2, '0') + String(d.getDate()).padStart(2, '0');
+}
+function isYMD(v) { return /^\d{8}$/.test(v) && !isNaN(Date.parse(v.slice(0,4) + '-' + v.slice(4,6) + '-' + v.slice(6,8))); }
+function ymdGreaterThan(a, b) { return a && b && a > b; }
+
+function escapeHtml(s) {
+  return String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+function toast(msg) {
+  const t = document.createElement('div');
+  t.className = 'toast';
+  t.textContent = msg;
+  document.body.appendChild(t);
+  setTimeout(() => t.remove(), 2400);
+}
+
+/* =====================================================================
+   PARSING
+   ===================================================================== */
+function parseFile(text, filename) {
+  const isXml = /^\s*<\?xml/i.test(text) || /<CRIMS_Submission_Input/i.test(text) || filename.toLowerCase().endsWith('.xml');
+  const records = [];
+  const lineMap = new Map();   // record-element-index → line in source
+
+  if (isXml) {
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(text, 'application/xml');
+    const errNode = doc.querySelector('parsererror');
+    if (errNode) {
+      return { records: [], parseError: errNode.textContent.replace(/\s+/g, ' ').slice(0, 200), format: 'xml' };
+    }
+
+    // Find lines per element by walking the raw text
+    const lines = text.split(/\r?\n/);
+
+    function findLineFor(tagName, occurrence) {
+      let count = 0;
+      const re = new RegExp('<' + tagName + '\\b', 'i');
+      for (let i = 0; i < lines.length; i++) {
+        if (re.test(lines[i])) {
+          if (count === occurrence) return i + 1;
+          count++;
+        }
+      }
+      return -1;
+    }
+
+    const collectByTag = (tagName, recordTypeName) => {
+      const els = doc.getElementsByTagName(tagName);
+      for (let i = 0; i < els.length; i++) {
+        const el = els[i];
+        const attrs = {};
+        for (let a of el.attributes) attrs[a.name] = a.value;
+        records.push({
+          recordType: recordTypeName,
+          line: findLineFor(tagName, i),
+          attrs,
+          raw: el.outerHTML
+        });
+      }
+    };
+
+    collectByTag('Header', 'Header');
+    collectByTag('Individuals', 'Individuals');
+    collectByTag('Companies', 'Companies');
+    collectByTag('CompanyLinks', 'CompanyLinks');
+    collectByTag('Installments', 'Installments');
+    collectByTag('NonInstallments', 'NonInstallments');
+    collectByTag('CreditCards', 'CreditCards');
+    collectByTag('OtherCreditAccomodations', 'OtherCreditAccomodations');
+    collectByTag('OtherCreditAccommodations', 'OtherCreditAccomodations'); // tolerant
+    collectByTag('Investments', 'Investments');
+    collectByTag('OffBalanceSheets', 'OffBalanceSheets');
+    collectByTag('SubjectNegativeEvents', 'SubjectNegativeEvents');
+    collectByTag('Footer', 'Footer');
+
+    return { records, format: 'xml' };
+  } else {
+    // TXT — pipe delimited
+    const lines = text.split(/\r?\n/);
+    const tagMap = {
+      HD: 'Header', FT: 'Footer',
+      ID: 'Individuals', BD: 'Companies',
+      SL: 'CompanyLinks',
+      CI: 'Installments', CN: 'NonInstallments', CC: 'CreditCards',
+      CA: 'OtherCreditAccomodations', CV: 'Investments', CF: 'OffBalanceSheets',
+      NE: 'SubjectNegativeEvents'
+    };
+    for (let i = 0; i < lines.length; i++) {
+      const ln = lines[i];
+      if (!ln.trim()) continue;
+      const parts = ln.split('|');
+      const code = parts[0].trim();
+      const recordType = tagMap[code];
+      if (!recordType) continue;
+      const attrs = { _rawParts: parts };
+      // Map by approximate position
+      attrs.RecordTypeCode = code;
+      if (code === 'HD') {
+        attrs.ProviderCode = parts[1] || '';
+        attrs.FileReferenceDate = parts[2] || '';
+        attrs.Version = parts[3] || '';
+        attrs.SubmissionType = parts[4] || '';
+        attrs.TotalSubjectRecords = parts[5] || '';
+        attrs.TotalContractRecords = parts[6] || '';
+        attrs.TotalNegativeEventRecords = parts[7] || '';
+      } else if (code === 'FT') {
+        attrs.ProviderCode = parts[1] || '';
+        attrs.FileReferenceDate = parts[2] || '';
+        attrs.NumberOfRecords = parts[3] || '';
+      } else {
+        // for body records, capture by position 2,3,4,5
+        attrs.ProviderCode = parts[1] || '';
+        attrs.BranchCode = parts[2] || '';
+      }
+      records.push({ recordType, line: i + 1, attrs, raw: ln });
+    }
+    return { records, format: 'txt' };
+  }
+}
+
+/* =====================================================================
+   VALIDATION ENGINE
+   ===================================================================== */
+function validateAll(parsed, filename) {
+  const findings = [];
+  const records = parsed.records;
+  const fmt = parsed.format;
+
+  function add(stage, severity, code, line, recordType, field, message, value) {
+    findings.push({ stage, severity, code, line, recordType, field, message, value });
+  }
+
+  // ----- Stage 1: Structure -----
+  if (parsed.parseError) {
+    add(1, 'error', '40-009', 1, 'File', '-', 'XML format is not correct: ' + parsed.parseError, '');
+    return findings;
+  }
+
+  // 30-002 / 40-001: filename
+  if (filename) {
+    const baseName = filename.replace(/\.(xml|txt)$/i, '');
+    const fileNamePattern = /^[A-Z0-9]{10}_CSDF_\d{14}$/i;
+    if (!fileNamePattern.test(baseName)) {
+      add(1, 'warning', '30-002', 0, 'Filename', 'filename',
+        'Filename does not match expected pattern [ProviderCode]_CSDF_YYYYMMDDAABBCC.{xml|txt}',
+        filename);
+    }
+  }
+
+  const headerRecs = records.filter(r => r.recordType === 'Header');
+  const footerRecs = records.filter(r => r.recordType === 'Footer');
+
+  if (headerRecs.length === 0)
+    add(1, 'error', '30-013', 0, 'Header', '-', 'Header is not present', '');
+  if (headerRecs.length > 1)
+    add(1, 'error', '30-026', headerRecs[1]?.line ?? 0, 'Header', '-', 'More than one Header row found', '');
+  if (footerRecs.length === 0)
+    add(1, 'error', '30-014', 0, 'Footer', '-', 'Footer is not present', '');
+  if (footerRecs.length > 1)
+    add(1, 'error', '30-027', footerRecs[1]?.line ?? 0, 'Footer', '-', 'More than one Footer row found', '');
+
+  if (records.length === 0)
+    add(1, 'error', '30-016', 0, 'File', '-', 'File specified is empty', '');
+
+  // 30-006: provider code consistency
+  const allProviderCodes = new Set();
+  records.forEach(r => {
+    if (r.attrs.ProviderCode) allProviderCodes.add(r.attrs.ProviderCode);
+  });
+  if (allProviderCodes.size > 1) {
+    records.forEach(r => {
+      if (r.attrs.ProviderCode && headerRecs[0] && r.attrs.ProviderCode !== headerRecs[0].attrs.ProviderCode) {
+        add(1, 'error', '30-006', r.line, r.recordType, 'ProviderCode',
+          `ProviderCode "${r.attrs.ProviderCode}" inside record differs from Header "${headerRecs[0].attrs.ProviderCode}"`,
+          r.attrs.ProviderCode);
+      }
+    });
+  }
+
+  // 30-007: file reference date
+  if (headerRecs[0]) {
+    const hd = headerRecs[0].attrs.FileReferenceDate;
+    if (!hd) add(1, 'error', '30-007', headerRecs[0].line, 'Header', 'FileReferenceDate', 'FileReferenceDate in Header is missing', '');
+    else if (!isYMD(hd)) add(1, 'error', '30-007', headerRecs[0].line, 'Header', 'FileReferenceDate', `FileReferenceDate is not valid YYYYMMDD`, hd);
+    else if (hd > todayYMD()) add(1, 'error', '30-007', headerRecs[0].line, 'Header', 'FileReferenceDate', `FileReferenceDate is in the future`, hd);
+
+    // 30-019: HD vs FT date match
+    if (footerRecs[0] && headerRecs[0].attrs.FileReferenceDate !== footerRecs[0].attrs.FileReferenceDate) {
+      add(1, 'error', '30-019', footerRecs[0].line, 'Footer', 'FileReferenceDate',
+        `Footer FileReferenceDate (${footerRecs[0].attrs.FileReferenceDate}) differs from Header (${headerRecs[0].attrs.FileReferenceDate})`,
+        footerRecs[0].attrs.FileReferenceDate);
+    }
+
+    // 30-008: number of records vs footer
+    if (footerRecs[0]) {
+      const declared = parseInt(footerRecs[0].attrs.NumberOfRecords, 10);
+      if (isNaN(declared)) {
+        add(1, 'error', '30-008', footerRecs[0].line, 'Footer', 'NumberOfRecords', 'NumberOfRecords in Footer is not a valid integer', footerRecs[0].attrs.NumberOfRecords);
+      } else {
+        const actual = records.length; // includes HD/FT in the COCREE "all records" count
+        if (declared !== actual) {
+          add(1, 'warning', '30-008', footerRecs[0].line, 'Footer', 'NumberOfRecords',
+            `Footer declares ${declared} records but file contains ${actual} (HD+FT included).`, declared);
+        }
+      }
+    }
+
+    // 30-015: version & submission type
+    if (!headerRecs[0].attrs.Version || headerRecs[0].attrs.Version !== '1.0') {
+      add(1, 'error', '30-015', headerRecs[0].line, 'Header', 'Version',
+        `Version must be "1.0"`, headerRecs[0].attrs.Version || '');
+    }
+    if (!headerRecs[0].attrs.SubmissionType ||
+        !DOMAINS.SubmissionTypeDomain.includes(headerRecs[0].attrs.SubmissionType)) {
+      add(1, 'error', '30-015', headerRecs[0].line, 'Header', 'SubmissionType',
+        `SubmissionType must be 0 (standard) or 1 (correction)`, headerRecs[0].attrs.SubmissionType || '');
+    }
+    // 30-031/032/033: counts
+    ['TotalSubjectRecords','TotalContractRecords','TotalNegativeEventRecords'].forEach((f, idx) => {
+      if (headerRecs[0].attrs[f] === undefined || headerRecs[0].attrs[f] === '' || isNaN(parseInt(headerRecs[0].attrs[f], 10))) {
+        add(1, 'error', `30-03${idx + 1}`, headerRecs[0].line, 'Header', f, `${f} is mandatory in Header`, '');
+      }
+    });
+  }
+
+  // ----- Stage 2: Business rules per record -----
+  records.forEach(rec => {
+    const def = RECORD_DEFS[rec.recordType];
+    if (!def) return;
+
+    // -- check mandatory fields
+    Object.entries(def.fields).forEach(([fname, rule]) => {
+      const val = rec.attrs[fname];
+      const isEmpty = val === undefined || val === null || String(val).trim() === '';
+
+      // mandatory check
+      if (rule.mandatory === true && isEmpty) {
+        const code = rule.errCode || '20-000';
+        add(2, 'error', code, rec.line, rec.recordType, fname,
+          `Field '${fname}' is mandatory (${rule.dd ?? ''})`, '');
+        return;
+      }
+
+      // conditional mandatory
+      if (typeof rule.mandatory === 'string' && rule.mandatory.startsWith('cond:') && isEmpty) {
+        const cond = rule.mandatory.split(':')[1];
+        if (cond === 'phaseACCLCA' && ['AC','CL','CA'].includes(rec.attrs.ContractPhase)) {
+          add(2, 'error', rule.errCode || '10-251', rec.line, rec.recordType, fname,
+            `Field '${fname}' is mandatory when ContractPhase is AC/CL/CA`, '');
+          return;
+        }
+        if (cond === 'active' && rec.attrs.ContractPhase === 'AC') {
+          add(2, 'error', rule.errCode || '20-232', rec.line, rec.recordType, fname,
+            `Field '${fname}' is mandatory when ContractPhase=AC`, '');
+          return;
+        }
+        if (cond === 'cc' && rec.attrs.ContractType && ['31','32','33'].includes(rec.attrs.ContractType)) {
+          add(2, 'error', rule.errCode || '10-275', rec.line, rec.recordType, fname,
+            `Field '${fname}' is mandatory when ContractType is Credit Card`, '');
+          return;
+        }
+        // cond:tin / cond:fullname handled below
+      }
+
+      if (isEmpty) return;
+
+      // domain check
+      if (rule.domain && !DOMAINS[rule.domain].includes(String(val))) {
+        const code = rule.errCode || '10-000';
+        add(2, 'error', code, rec.line, rec.recordType, fname,
+          `Field '${fname}' value is not in ${rule.domain}`, val);
+      }
+
+      // type checks
+      if (rule.type === 'date') {
+        if (!isYMD(val)) {
+          add(2, 'error', '10-005', rec.line, rec.recordType, fname,
+            `Field '${fname}' must be valid date in YYYYMMDD`, val);
+        } else if (rule.minDate && val <= rule.minDate) {
+          add(2, 'error', '20-125', rec.line, rec.recordType, fname,
+            `Field '${fname}' must be greater than ${rule.minDate}`, val);
+        }
+      }
+      if (rule.type === 'number' || rule.type === 'integer') {
+        const n = Number(val);
+        if (isNaN(n)) {
+          add(2, 'error', '10-046', rec.line, rec.recordType, fname,
+            `Field '${fname}' must be numeric`, val);
+        } else if (rule.minVal !== undefined && n < rule.minVal) {
+          add(2, 'error', '20-200', rec.line, rec.recordType, fname,
+            `Field '${fname}' cannot be negative`, val);
+        }
+      }
+
+      // length check
+      if (rule.length && String(val).length !== rule.length) {
+        add(2, 'error', '10-003', rec.line, rec.recordType, fname,
+          `Field '${fname}' length must be ${rule.length} (got ${String(val).length})`, val);
+      }
+      if (rule.maxLen && String(val).length > rule.maxLen) {
+        add(2, 'error', '10-034', rec.line, rec.recordType, fname,
+          `Field '${fname}' exceeds max length ${rule.maxLen}`, val);
+      }
+
+      // TIN format
+      if (rule.tinFormat) {
+        if (!/^\d{9,12}$/.test(val)) {
+          add(2, 'error', '20-050', rec.line, rec.recordType, fname,
+            `TIN must be 9–12 digits, numeric only`, val);
+        }
+      }
+    });
+
+    // ----- record-specific dependency checks -----
+    if (rec.recordType === 'Individuals') {
+      // 20-021/023: at least one of (FirstName+LastName) or FullName, not both
+      const hasFL = rec.attrs.FirstName && rec.attrs.LastName;
+      const hasFull = !!rec.attrs.FullName;
+      if (!hasFL && !hasFull) {
+        add(2, 'error', '20-021', rec.line, rec.recordType, 'FirstName/LastName/FullName',
+          `Either FirstName+LastName or FullName is mandatory`, '');
+      }
+      // TIN dependency (20-026): if no TIN, at least one ID must exist
+      const hasAnyId = rec.attrs.IDNumber1 || rec.attrs.IDNumber2 || rec.attrs.IDNumber3;
+      if (!rec.attrs.TIN && !hasAnyId) {
+        add(2, 'error', '20-026', rec.line, rec.recordType, 'TIN/ID',
+          `If TIN is empty, at least one ID document must be filled in`, '');
+      }
+      // 20-139: address requirement
+      const hasParsed = rec.attrs.PermanentStreetNo && rec.attrs.PermanentCity && rec.attrs.PermanentProvince && rec.attrs.PermanentCountry;
+      const hasFullAddr = rec.attrs.PermanentFullAddress;
+      if (!hasParsed && !hasFullAddr) {
+        add(2, 'warning', '20-139', rec.line, rec.recordType, 'PermanentAddress',
+          `Permanent address: fill (StreetNo+City+Province+Country) OR FullAddress`, '');
+      }
+    }
+
+    if (rec.recordType === 'Installments' || rec.recordType === 'NonInstallments' || rec.recordType === 'CreditCards') {
+      // 10-251 / 10-252 / 10-255 / 10-256: phase vs dates
+      const phase = rec.attrs.ContractPhase;
+      const sd = rec.attrs.ContractStartDate;
+      const ep = rec.attrs.ContractPlannedEndDate;
+      const ea = rec.attrs.ContractActualEndDate;
+      if (sd && ep && isYMD(sd) && isYMD(ep) && sd > ep) {
+        add(2, 'error', '10-255', rec.line, rec.recordType, 'ContractStartDate',
+          `ContractStartDate (${sd}) is greater than ContractPlannedEndDate (${ep})`, sd);
+      }
+      if (sd && ea && isYMD(sd) && isYMD(ea) && sd > ea) {
+        add(2, 'error', '10-256', rec.line, rec.recordType, 'ContractStartDate',
+          `ContractStartDate (${sd}) is greater than ContractActualEndDate (${ea})`, sd);
+      }
+      if (['CL','CA'].includes(phase) && !ea) {
+        add(2, 'error', '10-253', rec.line, rec.recordType, 'ContractActualEndDate',
+          `ContractActualEndDate is mandatory when ContractPhase is ${phase}`, '');
+      }
+    }
+  });
+
+  // ----- Stage 3: Loading/cross-record checks -----
+  // 10-090: duplicate ProviderSubjectNumber (across ID + BD)
+  const subjMap = new Map();
+  records.filter(r => r.recordType === 'Individuals' || r.recordType === 'Companies').forEach(r => {
+    const psn = r.attrs.ProviderSubjectNumber;
+    if (!psn) return;
+    if (subjMap.has(psn)) {
+      add(3, 'error', '10-090', r.line, r.recordType, 'ProviderSubjectNumber',
+        `Duplicate ProviderSubjectNumber "${psn}" — also at line ${subjMap.get(psn)}`, psn);
+    } else {
+      subjMap.set(psn, r.line);
+    }
+  });
+
+  // 20-310: duplicate provider contract no + ref date
+  const contractMap = new Map();
+  ['Installments','NonInstallments','CreditCards','OtherCreditAccomodations','Investments','OffBalanceSheets'].forEach(rt => {
+    records.filter(r => r.recordType === rt).forEach(r => {
+      const key = (r.attrs.ProviderContractNo || '') + '|' + (r.attrs.ContractRefDate || '');
+      if (!r.attrs.ProviderContractNo) return;
+      if (contractMap.has(key)) {
+        add(3, 'error', '20-310', r.line, rt, 'ProviderContractNo',
+          `Duplicate ProviderContractNo+RefDate combination — also at line ${contractMap.get(key)}`,
+          r.attrs.ProviderContractNo);
+      } else {
+        contractMap.set(key, r.line);
+      }
+    });
+  });
+
+  // 10-307: contract references a subject not in file
+  const subjects = new Set([...subjMap.keys()]);
+  ['Installments','NonInstallments','CreditCards','OtherCreditAccomodations','Investments','OffBalanceSheets'].forEach(rt => {
+    records.filter(r => r.recordType === rt).forEach(r => {
+      if (r.attrs.ProviderSubjectNo && !subjects.has(r.attrs.ProviderSubjectNo)) {
+        add(3, 'error', '10-307', r.line, rt, 'ProviderSubjectNo',
+          `Contract references ProviderSubjectNo "${r.attrs.ProviderSubjectNo}" but no matching ID/BD subject in file`,
+          r.attrs.ProviderSubjectNo);
+      }
+    });
+  });
+
+  // 10-318: company link parent or child not in file; 10-320: parent==child
+  records.filter(r => r.recordType === 'CompanyLinks').forEach(r => {
+    const p = r.attrs.ParentProviderSubjectNo;
+    const c = r.attrs.ChildProviderSubjectNo;
+    if (p && c && p === c) {
+      add(3, 'error', '10-320', r.line, 'CompanyLinks', 'ParentProviderSubjectNo/ChildProviderSubjectNo',
+        `Parent and Child ProviderSubjectNo cannot be the same`, p);
+    }
+    if (p && !subjects.has(p)) {
+      add(3, 'error', '10-318', r.line, 'CompanyLinks', 'ParentProviderSubjectNo',
+        `Parent subject "${p}" does not exist in file`, p);
+    }
+    if (c && !subjects.has(c)) {
+      add(3, 'error', '10-318', r.line, 'CompanyLinks', 'ChildProviderSubjectNo',
+        `Child subject "${c}" does not exist in file`, c);
+    }
+  });
+
+  // 10-301: submission type 0 with same contract being updated (we can't fully check without DB - just warn)
+  return findings;
+}
+
+/* =====================================================================
+   GENERATOR
+   ===================================================================== */
+function pickFromDomain(d) {
+  const arr = DOMAINS[d];
+  return arr[Math.floor(Math.random() * arr.length)];
+}
+function r(min, max) { return Math.floor(Math.random() * (max - min + 1)) + min; }
+function rTIN() { return String(r(100000000, 999999999)) + String(r(100, 999)); }
+
+function generateSampleData(opts) {
+  const today = todayYMD();
+  const refDate = opts.refDate || today;
+  const provider = opts.provider || 'BSP0000006';
+  const branch = opts.branch || 'B0001';
+  const subType = opts.subType || '0';
+
+  const recs = [];
+  const subjects = [];
+  const contracts = [];
+  const negatives = [];
+  const links = [];
+  let subjCounter = 1;
+  let contractCounter = 1;
+
+  const subjectId = () => `SUBJ_${String(subjCounter++).padStart(6, '0')}`;
+  const contractId = () => `CONTR_${String(contractCounter++).padStart(6, '0')}`;
+
+  const idIndividual = subjectId();
+  const idCompany = subjectId();
+
+  if (opts.ID) {
+    subjects.push({
+      tag: 'Individuals',
+      attrs: {
+        ProviderCode: provider, BranchCode: branch,
+        SubjectReferenceDate: refDate,
+        ProviderSubjectNumber: idIndividual,
+        Title: '10', FirstName: 'JUAN', MiddleName: 'DELA', LastName: 'CRUZ',
+        FullName: '', Suffix: '', PreviousLastName: '',
+        Gender: 'M', BirthDate: '19800815',
+        BirthPlace: 'MANILA', BirthCountry: 'PH', Nationality: 'PH',
+        Resident: '1', CivilStatus: '2',
+        DependantsNo: '2', CarsOwnedNo: '1',
+        MotherMaidenFullName: 'GARCIA',
+        PermanentFullAddress: '',
+        PermanentStreetNo: '123 RIZAL STREET',
+        PermanentPostalCode: '1010',
+        PermanentPSGCode: pickFromDomain('PSGCDomain'),
+        PermanentCity: 'MANILA',
+        PermanentProvince: 'METRO MANILA',
+        PermanentCountry: 'PH',
+        PermanentHouseOwnerLessee: '1',
+        CurrentFullAddress: '123 RIZAL STREET MANILA 1010 PH',
+        CurrentStreetNo: '', CurrentPostalCode: '', CurrentPSGCode: '',
+        CurrentCity: '', CurrentProvince: '', CurrentCountry: '',
+        CurrentHouseOwnerLessee: '',
+        TIN: rTIN(),
+        IdentificationType2: '', IdentificationNumber2: '',
+        IdentificationType3: '', IdentificationNumber3: '',
+        IDType1: '32', IDNumber1: '456765432',
+        IDIssueDate1: '20200101', IDIssueCountry1: 'PH', IDExpiryDate1: '20300101',
+        IDType2: '', IDNumber2: '', IDIssueDate2: '', IDIssueCountry2: '', IDExpiryDate2: '',
+        IDType3: '', IDNumber3: '', IDIssueDate3: '', IDIssueCountry3: '', IDExpiryDate3: '',
+        ContactType1: '1', ContactValue1: '09171234567',
+        ContactType2: '7', ContactValue2: 'juan@mail.ph',
+        EmploymentTradeName: 'ACME CORP',
+        EmploymentPSIC: 'O',
+        EmploymentGrossIncome: '50000',
+        EmploymentNetIncome: '40000',
+        EmploymentAnnualMonthlyIndicator: 'M',
+        EmploymentOccupationStatus: '3',
+        EmploymentDateHiredFrom: '20180101',
+        SoleTraderTradeName: '',
+        STCurrentFullAddress: '', STCurrentStreetNo: '', STCurrentPostalCode: '',
+        STCurrentPSGCode: '', STCurrentCity: '', STCurrentProvince: '',
+        STCurrentCountry: '', STCurrentHouseOwnerLessee: '',
+        SoleTraderTIN: '',
+        STIdentificationType2: '', STIdentificationNumber2: '',
+        STContactType1: '', STContactValue1: '', STContactType2: '', STContactValue2: '',
+        LargeExposureIndicator: '0'
+      }
+    });
+  }
+
+  if (opts.BD) {
+    subjects.push({
+      tag: 'Companies',
+      attrs: {
+        ProviderCode: provider, BranchCode: branch,
+        SubjectReferenceDate: refDate,
+        ProviderSubjectNumber: idCompany,
+        TradeName: 'SAMPLE TRADING',
+        OfficialRegisteredTradeName: 'SAMPLE TRADING CORPORATION',
+        Nationality: 'PH', Resident: '1', LegalForm: '20',
+        ExistenceTerm: '20500101', NatureOfBusiness: 'G',
+        RegistrationDate: '20100101', EmployeesNo: '50',
+        FirmSize: '2', GrossAnnualIncome: '5000000',
+        NetAnnualIncome: '4000000', MonthlyExpenses: '300000',
+        Conglomerate: 'N',
+        CurrentFullAddress: '',
+        CurrentStreetNo: '456 MAKATI AVE',
+        CurrentPostalCode: '1226',
+        CurrentPSGCode: pickFromDomain('PSGCDomain'),
+        CurrentCity: 'MAKATI',
+        CurrentProvince: 'METRO MANILA',
+        CurrentCountry: 'PH',
+        CurrentHouseOwnerLessee: '1',
+        TIN: rTIN(),
+        IdentificationType2: '', IdentificationNumber2: '',
+        ContactType1: '1', ContactValue1: '028123456',
+        ContactType2: '', ContactValue2: '',
+        LargeExposureIndicator: '0'
+      }
+    });
+  }
+
+  const subjForContracts = opts.ID ? idIndividual : (opts.BD ? idCompany : 'SUBJ_000001');
+
+  if (opts.CI) {
+    contracts.push({
+      tag: 'Installments',
+      attrs: {
+        ProviderCode: provider, BranchCode: branch,
+        ContractRefDate: refDate, ProviderSubjectNo: subjForContracts,
+        Role: 'B', DOSRI: '0', RPT: '0',
+        ProviderContractNo: contractId(),
+        ContractType: '13', ContractPhase: 'AC', ContractStatus: 'NN',
+        RegulatoryStatus: 'CR', OriginalCurrency: 'PHP',
+        ContractStartDate: '20240115', ContractRequestDate: '20240105',
+        ContractPlannedEndDate: '20440131', ContractActualEndDate: '',
+        LastPaymentDate: refDate, RestructuredCreditCode: '2',
+        BoardResolutionFlag: '0', BookType: 'B',
+        FinancedAmount: '500000', FinancedAmountOriginalCurrency: '500000',
+        InstallmentsNumber: '240', TransactionType: 'NA',
+        CreditPurpose: '10', CreditPurposeEconomicActivity: 'F',
+        PaymentPeriodicity: 'M', PaymentMethod: 'CAD',
+        MonthlyPaymentAmount: '5000', FirstPaymentDate: '20240131',
+        LastPaymentAmount: '5000', NextPaymentDate: '20240228',
+        NextPayment: '5000', OutstandingPaymentsNumber: '236',
+        OutstandingBalance: '480000', OutstandingBalanceOriginalCurrency: '480000',
+        OverduePaymentsNumber: '0', OverduePaymentsAmount: '0',
+        DaysPastDue: '0',
+        AllowanceECLOriginalCurrency: '5000', AllowanceECL: '5000',
+        NetCarryingAmountLoanOriginalCurrency: '475000',
+        NetCarryingAmountLoan: '475000',
+        NominalInterestRate: '6', StageImpairmentPFRS9: '1',
+        CreditClassification: '1', ProbabilityDefault: '0',
+        EffectiveInterestRate: '6', UnearnedInterest: '50000',
+        InterestSetting: '1', FrequencyRepricing: '1',
+        LoanFundersNumber: '1'
+      }
+    });
+  }
+
+  if (opts.CN) {
+    contracts.push({
+      tag: 'NonInstallments',
+      attrs: {
+        ProviderCode: provider, BranchCode: branch,
+        ContractRefDate: refDate, ProviderSubjectNo: subjForContracts,
+        Role: 'B', DOSRI: '0', RPT: '0',
+        ProviderContractNo: contractId(),
+        ContractType: '21', ContractPhase: 'AC', ContractStatus: 'NN',
+        RegulatoryStatus: 'CR', OriginalCurrency: 'PHP',
+        ContractStartDate: '20240101',
+        BookType: 'B',
+        CreditLimit: '300000', CreditLimitOriginalCurrency: '300000',
+        UtilizationAmount: '100000', UtilizationAmountOriginalCurrency: '100000',
+        OverallCreditLimit: '300000',
+        DaysPastDue: '0',
+        TransactionType: 'NA', CreditPurpose: '10',
+        CreditPurposeEconomicActivity: 'G',
+        AllowanceECLOriginalCurrency: '1000', AllowanceECL: '1000',
+        NetCarryingAmountLoanOriginalCurrency: '99000',
+        NetCarryingAmountLoan: '99000',
+        NominalInterestRate: '8',
+        StageImpairmentPFRS9: '1', CreditClassification: '1',
+        ProbabilityDefault: '0', EffectiveInterestRate: '8',
+        UnearnedInterest: '0', InterestSetting: '1',
+        FrequencyRepricing: '1', RestructuredCreditCode: '2'
+      }
+    });
+  }
+
+  if (opts.CC) {
+    contracts.push({
+      tag: 'CreditCards',
+      attrs: {
+        ProviderCode: provider, BranchCode: branch,
+        ContractRefDate: refDate, ProviderSubjectNo: subjForContracts,
+        Role: 'B', DOSRI: '0', RPT: '0',
+        ProviderContractNo: contractId(),
+        ContractType: '31', ContractPhase: 'AC', ContractStatus: 'NN',
+        RegulatoryStatus: 'CR', OriginalCurrency: 'PHP',
+        ContractStartDate: '20240115',
+        BookType: 'B',
+        CreditLimit: '100000', CreditLimitOriginalCurrency: '100000',
+        TransactionType: 'NA', PaymentPeriodicity: 'M',
+        PaymentMethod: 'CAD', MonthlyPaymentAmount: '2000',
+        NextPaymentDate: '20240228', NextPayment: '2000',
+        LastPaymentAmount: '2000',
+        OutstandingBalance: '50000', OutstandingBalanceOriginalCurrency: '50000',
+        OutstandingBalanceUnbilled: '0', OverduePaymentsNumber: '0',
+        OverduePaymentsAmount: '0', DaysPastDue: '0',
+        InstallmentType: 'F', ChargedAmount: '2000',
+        LastChargeDate: '20240320', FlagCardUsed: '1',
+        TimesCardUsed: '12', PremiumCard: '0',
+        AllowanceECLOriginalCurrency: '500', AllowanceECL: '500',
+        NetCarryingAmountLoanOriginalCurrency: '49500',
+        NetCarryingAmountLoan: '49500',
+        NominalInterestRate: '24', StageImpairmentPFRS9: '1',
+        CreditClassification: '1', ProbabilityDefault: '0',
+        EffectiveInterestRate: '24', UnearnedInterest: '0',
+        InterestSetting: '1', FrequencyRepricing: '1'
+      }
+    });
+  }
+
+  if (opts.CA) {
+    contracts.push({
+      tag: 'OtherCreditAccomodations',
+      attrs: {
+        ProviderCode: provider, BranchCode: branch,
+        ContractRefDate: refDate, ProviderSubjectNo: subjForContracts,
+        Role: 'B', DOSRI: '0', RPT: '0',
+        ProviderContractNo: contractId(),
+        BookType: 'B', OtherCreditAccType: '3001',
+        GrantDate: '20240101', MaturityDate: '20440101',
+        RegulatoryStatus: 'CR', OriginalCurrency: 'PHP',
+        CreditPurpose: '10', CreditPurposeEconomicActivity: 'F',
+        AmountGrantedOriginalCurrency: '200000', AmountGranted: '200000',
+        OutstandingBalanceOriginalCurrency: '195000', OutstandingBalance: '195000',
+        AllowanceECLOriginalCurrency: '2000', AllowanceECL: '2000',
+        NetCarryingAmountLoanOriginalCurrency: '193000',
+        NetCarryingAmountLoan: '193000',
+        NominalInterestRate: '6', StageImpairmentPFRS9: '1',
+        CreditClassification: '1', ProbabilityDefault: '0',
+        EffectiveInterestRate: '6', UnearnedInterest: '0',
+        InterestSetting: '1', FrequencyRepricing: '1',
+        DaysPastDue: '0', RestructuredCreditCode: '2'
+      }
+    });
+  }
+
+  if (opts.CV) {
+    contracts.push({
+      tag: 'Investments',
+      attrs: {
+        ProviderCode: provider, BranchCode: branch,
+        ContractRefDate: refDate, ProviderSubjectNo: subjForContracts,
+        Role: 'B', DOSRI: '0', RPT: '0',
+        ProviderContractNo: contractId(),
+        BookType: 'I', BookCode: '11', TrustType: '3', InvestmentType: 'B',
+        GrantDate: '20240101', MaturityDate: '20290101',
+        OriginalCurrency: 'PHP',
+        AmountGrantedOriginalCurrency: '1000000', AmountGranted: '1000000',
+        AccumulatedMarketGainsOriginalCurrency: '50000',
+        AccumulatedMarketGains: '50000',
+        OutstandingBalanceOriginalCurrency: '1000000',
+        OutstandingBalance: '1000000',
+        AllowanceECLOriginalCurrency: '0', AllowanceECL: '0',
+        NetCarryingAmountLoanOriginalCurrency: '1000000',
+        NetCarryingAmountLoan: '1000000',
+        NominalInterestRate: '4',
+        StageImpairmentPFRS9: '1', ProbabilityDefault: '0',
+        EffectiveInterestRate: '4', UnearnedInterest: '0',
+        InterestSetting: '1', FrequencyRepricing: '1',
+        DaysPastDue: '0', RestructuredCreditCode: '2',
+        CreditRatingAgencyUsed: 'M', CreditRatingIssuerLastInvestment: '8',
+        LatestCreditRatingIssuer: '7', NatureOfOffering: 'PP'
+      }
+    });
+  }
+
+  if (opts.CF) {
+    contracts.push({
+      tag: 'OffBalanceSheets',
+      attrs: {
+        ProviderCode: provider, BranchCode: branch,
+        ContractRefDate: refDate, ProviderSubjectNo: subjForContracts,
+        Role: 'B', DOSRI: '0', RPT: '0',
+        ProviderContractNo: contractId(),
+        ContingentAccountType: 'D', OriginalCurrency: 'PHP',
+        OutstandingBalanceOriginalCurrency: '50000',
+        OutstandingBalance: '50000',
+        AllowanceECLOriginalCurrency: '500', AllowanceECL: '500',
+        NetCarryingAmountLoanOriginalCurrency: '49500',
+        NetCarryingAmountLoan: '49500',
+        StageImpairmentPFRS9: '1', ProbabilityDefault: '0'
+      }
+    });
+  }
+
+  if (opts.NE) {
+    negatives.push({
+      tag: 'SubjectNegativeEvents',
+      attrs: {
+        ProviderCode: provider, BranchCode: branch,
+        NegativeEventRefDate: refDate, ProviderSubjectNo: subjForContracts,
+        EventCode: 'U', EventDetail: 'SAMPLE EVENT',
+        EventDate: '20240101', EventStatus: 'AC',
+        EventStatusDate: refDate
+      }
+    });
+  }
+
+  if (opts.SL && opts.ID && opts.BD) {
+    links.push({
+      tag: 'CompanyLinks',
+      attrs: {
+        ProviderCode: provider, BranchCode: branch,
+        CompanyLinkRefDate: refDate,
+        ParentProviderSubjectNo: idIndividual,
+        CompanyRole: 'D',
+        ChildProviderSubjectNo: idCompany
+      }
+    });
+  }
+
+  return {
+    header: {
+      ProviderCode: provider,
+      FileReferenceDate: refDate,
+      Version: '1.0',
+      SubmissionType: subType,
+      TotalSubjectRecords: String(subjects.length),
+      TotalContractRecords: String(contracts.length),
+      TotalNegativeEventRecords: String(negatives.length),
+      ProviderComments: 'EEEJAY-COCREE-CHECKER-SAMPLE'
+    },
+    body: { subjects, contracts, negatives, links },
+    footer: {
+      ProviderCode: provider,
+      FileReferenceDate: refDate,
+      NumberOfRecords: String(2 + subjects.length + contracts.length + negatives.length + links.length)
+    }
+  };
+}
+
+function buildXml(data) {
+  const attr = obj => Object.entries(obj).map(([k,v]) => `${k}="${escapeAttr(v)}"`).join(' ');
+  function escapeAttr(v) { return String(v ?? '').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;'); }
+
+  const lines = [];
+  lines.push('<?xml version="1.0" encoding="UTF-8"?>');
+  lines.push('<!-- Generated by Eeejay COCREE Checker · dev by Bongzkie -->');
+  lines.push('<CRIMS_Submission_Input xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="CRIMSPhilippines_Submission_input_only.xsd">');
+  lines.push(`  <Header ${attr(data.header)}/>`);
+  lines.push('  <Body>');
+  data.body.subjects.forEach(s => lines.push(`    <${s.tag} ${attr(s.attrs)}/>`));
+  data.body.links.forEach(l => lines.push(`    <${l.tag} ${attr(l.attrs)}/>`));
+  data.body.contracts.forEach(c => lines.push(`    <${c.tag} ${attr(c.attrs)}/>`));
+  data.body.negatives.forEach(n => lines.push(`    <${n.tag} ${attr(n.attrs)}/>`));
+  lines.push('  </Body>');
+  lines.push(`  <Footer ${attr(data.footer)}/>`);
+  lines.push('</CRIMS_Submission_Input>');
+  return lines.join('\n');
+}
+
+function buildTxt(data) {
+  const tagToCode = {
+    Individuals: 'ID', Companies: 'BD', CompanyLinks: 'SL',
+    Installments: 'CI', NonInstallments: 'CN', CreditCards: 'CC',
+    OtherCreditAccomodations: 'CA', Investments: 'CV', OffBalanceSheets: 'CF',
+    SubjectNegativeEvents: 'NE'
+  };
+  const lines = [];
+  lines.push(['HD', data.header.ProviderCode, data.header.FileReferenceDate,
+              data.header.Version, data.header.SubmissionType,
+              data.header.TotalSubjectRecords, data.header.TotalContractRecords,
+              data.header.TotalNegativeEventRecords, data.header.ProviderComments].join('|'));
+
+  const allBody = [...data.body.subjects, ...data.body.links, ...data.body.contracts, ...data.body.negatives];
+  allBody.forEach(item => {
+    const code = tagToCode[item.tag];
+    const vals = Object.values(item.attrs).map(v => v ?? '');
+    lines.push([code, ...vals].join('|'));
+  });
+
+  lines.push(['FT', data.footer.ProviderCode, data.footer.FileReferenceDate, data.footer.NumberOfRecords].join('|'));
+  return lines.join('\n');
+}
+
+function highlightXml(s) {
+  return escapeHtml(s)
+    .replace(/(&lt;\/?[\w_-]+)/g, '<span class="xml-tag">$1</span>')
+    .replace(/([\w_-]+)=&quot;([^&]*?)&quot;/g, '<span class="xml-attr">$1</span>=<span class="xml-val">"$2"</span>');
+}
+
+/* =====================================================================
+   AUTO-FIX ENGINE
+   Repairs ONLY mandatory + dependency-driven errors so a sandbox file
+   passes validation. Optional/business-content fields are left untouched.
+   ===================================================================== */
+
+// Default valid values used when a mandatory field is missing or invalid.
+// These mirror the values used by the generator (which produces a clean file).
+const FIX_DEFAULTS = {
+  Header: {
+    ProviderCode: 'BSP0000006',
+    Version: '1.0',
+    SubmissionType: '0',
+    TotalSubjectRecords: '0',
+    TotalContractRecords: '0',
+    TotalNegativeEventRecords: '0'
+  },
+  Footer: {
+    ProviderCode: 'BSP0000006',
+    NumberOfRecords: '0'
+  },
+  Individuals: {
+    BranchCode: 'B0001',
+    Title: '10',
+    FirstName: 'JUAN',
+    LastName: 'DELA CRUZ',
+    Gender: 'M',
+    BirthDate: '19800815',
+    BirthPlace: 'MANILA',
+    BirthCountry: 'PH',
+    Nationality: 'PH',
+    Resident: '1',
+    CivilStatus: '2',
+    MotherMaidenFullName: 'GARCIA',
+    PermanentFullAddress: '123 RIZAL ST, MANILA, PH'
+  },
+  Companies: {
+    BranchCode: 'B0001',
+    TradeName: 'SAMPLE TRADING',
+    OfficialRegisteredTradeName: 'SAMPLE TRADING CORP',
+    Nationality: 'PH',
+    Resident: '1',
+    LegalForm: '20',
+    FirmSize: '2'
+  },
+  Installments: {
+    BranchCode: 'B0001',
+    Role: 'B', DOSRI: '0', RPT: '0',
+    ContractType: '13', ContractPhase: 'AC',
+    RegulatoryStatus: 'CR', OriginalCurrency: 'PHP',
+    ContractStartDate: '20240101',
+    BookType: 'B', FinancedAmount: '100000',
+    FinancedAmountOriginalCurrency: '100000',
+    InstallmentsNumber: '24',
+    CreditPurpose: '10', PaymentPeriodicity: 'M'
+  },
+  NonInstallments: {
+    BranchCode: 'B0001', Role: 'B', DOSRI: '0', RPT: '0',
+    ContractType: '21', ContractPhase: 'AC',
+    OriginalCurrency: 'PHP',
+    CreditLimitOriginalCurrency: '100000',
+    BookType: 'B'
+  },
+  CreditCards: {
+    BranchCode: 'B0001', Role: 'B', DOSRI: '0', RPT: '0',
+    ContractType: '31', ContractPhase: 'AC',
+    ContractStatus: 'NN', OriginalCurrency: 'PHP',
+    BookType: 'B', CreditLimit: '100000',
+    CreditLimitOriginalCurrency: '100000',
+    InstallmentType: 'F', PaymentPeriodicity: 'M'
+  },
+  OtherCreditAccomodations: {
+    BranchCode: 'B0001', Role: 'B', DOSRI: '0', RPT: '0',
+    BookType: 'B', OtherCreditAccType: '3001',
+    GrantDate: '20240101', MaturityDate: '20440101',
+    OriginalCurrency: 'PHP',
+    AmountGrantedOriginalCurrency: '100000', AmountGranted: '100000',
+    OutstandingBalanceOriginalCurrency: '100000', OutstandingBalance: '100000',
+    DaysPastDue: '0'
+  },
+  Investments: {
+    BranchCode: 'B0001', Role: 'B', DOSRI: '0', RPT: '0',
+    BookType: 'I', BookCode: '11',
+    TrustType: '3', InvestmentType: 'B',
+    GrantDate: '20240101', MaturityDate: '20290101',
+    OriginalCurrency: 'PHP',
+    AmountGrantedOriginalCurrency: '100000', AmountGranted: '100000',
+    AccumulatedMarketGainsOriginalCurrency: '0', AccumulatedMarketGains: '0'
+  },
+  OffBalanceSheets: {
+    BranchCode: 'B0001', Role: 'B', DOSRI: '0', RPT: '0',
+    ContingentAccountType: 'D', OriginalCurrency: 'PHP',
+    OutstandingBalanceOriginalCurrency: '0', OutstandingBalance: '0'
+  },
+  SubjectNegativeEvents: {
+    BranchCode: 'B0001', EventCode: 'U'
+  },
+  CompanyLinks: {
+    BranchCode: 'B0001', CompanyRole: 'D'
+  }
+};
+
+function fixDateFormat(val, refDate) {
+  if (!val) return refDate || todayYMD();
+  // Already valid?
+  if (isYMD(val)) return val;
+  // Strip non-digits and try to parse common patterns
+  const stripped = String(val).replace(/[^\d]/g, '');
+  if (stripped.length === 8) {
+    // Could be YYYYMMDD or DDMMYYYY or MMDDYYYY
+    const yy = stripped.slice(0, 4), mm = stripped.slice(4, 6), dd = stripped.slice(6, 8);
+    if (yy >= '1900' && yy <= '2100' && mm >= '01' && mm <= '12' && dd >= '01' && dd <= '31') {
+      return stripped;
+    }
+    // MMDDYYYY
+    const m2 = stripped.slice(0, 2), d2 = stripped.slice(2, 4), y2 = stripped.slice(4, 8);
+    if (y2 >= '1900' && y2 <= '2100' && m2 >= '01' && m2 <= '12' && d2 >= '01' && d2 <= '31') {
+      return y2 + m2 + d2;
+    }
+    // DDMMYYYY
+    const d3 = stripped.slice(0, 2), m3 = stripped.slice(2, 4), y3 = stripped.slice(4, 8);
+    if (y3 >= '1900' && y3 <= '2100' && m3 >= '01' && m3 <= '12' && d3 >= '01' && d3 <= '31') {
+      return y3 + m3 + d3;
+    }
+  }
+  // Fallback
+  return refDate || todayYMD();
+}
+
+function autoFixFile(parsed, findings, originalFilename) {
+  // Deep-clone records
+  const records = parsed.records.map(r => ({
+    recordType: r.recordType,
+    line: r.line,
+    attrs: Object.assign({}, r.attrs),
+    raw: r.raw
+  }));
+
+  const changes = [];
+  const refDate = (records.find(r => r.recordType === 'Header')?.attrs.FileReferenceDate) || todayYMD();
+  const headerProvider = records.find(r => r.recordType === 'Header')?.attrs.ProviderCode;
+
+  function logChange(line, recordType, field, from, to, reason) {
+    changes.push({
+      line, recordType, field,
+      from: from === undefined || from === null ? '' : String(from),
+      to: String(to),
+      reason
+    });
+  }
+
+  function setField(rec, field, value, reason) {
+    const old = rec.attrs[field];
+    if (old !== value) {
+      rec.attrs[field] = value;
+      logChange(rec.line, rec.recordType, field, old, value, reason);
+    }
+  }
+
+  // -------- Helper: fix a single field given its rule --------
+  function fixField(rec, fieldName, rule) {
+    const cur = rec.attrs[fieldName];
+    const isEmpty = cur === undefined || cur === null || String(cur).trim() === '';
+
+    // Determine if this rule needs filling (mandatory or condition met)
+    let mustFill = rule.mandatory === true && isEmpty;
+    if (typeof rule.mandatory === 'string' && rule.mandatory.startsWith('cond:') && isEmpty) {
+      const cond = rule.mandatory.split(':')[1];
+      if (cond === 'phaseACCLCA' && ['AC','CL','CA'].includes(rec.attrs.ContractPhase)) mustFill = true;
+      if (cond === 'active' && rec.attrs.ContractPhase === 'AC') mustFill = true;
+      if (cond === 'cc' && ['31','32','33'].includes(rec.attrs.ContractType)) mustFill = true;
+    }
+
+    if (mustFill) {
+      const def = (FIX_DEFAULTS[rec.recordType] || {})[fieldName];
+      if (def !== undefined) {
+        setField(rec, fieldName, def, `Mandatory field was empty (${rule.dd || ''})`);
+      } else if (rule.domain) {
+        setField(rec, fieldName, DOMAINS[rule.domain][0], `Mandatory field was empty — picked first valid domain value`);
+      } else if (rule.type === 'date') {
+        setField(rec, fieldName, refDate, `Mandatory date was empty — set to file reference date`);
+      } else if (rule.type === 'number' || rule.type === 'integer') {
+        setField(rec, fieldName, '0', `Mandatory numeric was empty — set to 0`);
+      } else if (rule.tinFormat) {
+        setField(rec, fieldName, String(r(100000000, 999999999999)).slice(0, 12), `Generated valid 12-digit TIN`);
+      } else if (rule.length === 10) {
+        setField(rec, fieldName, headerProvider || 'BSP0000006', `Padded ProviderCode to 10 chars`);
+      } else {
+        setField(rec, fieldName, 'AUTOFILL', `Mandatory field was empty`);
+      }
+      return;
+    }
+
+    if (isEmpty) return; // optional & empty - leave alone
+
+    // Domain mismatch
+    if (rule.domain && !DOMAINS[rule.domain].includes(String(cur))) {
+      // Try fuzzy: same first character?
+      const candidates = DOMAINS[rule.domain];
+      let pick = candidates.find(c => c.toLowerCase() === String(cur).toLowerCase());
+      if (!pick) pick = (FIX_DEFAULTS[rec.recordType] || {})[fieldName];
+      if (!pick || !candidates.includes(pick)) pick = candidates[0];
+      setField(rec, fieldName, pick, `Invalid domain value — replaced from ${rule.domain}`);
+    }
+
+    // Bad date
+    if (rule.type === 'date' && !isYMD(cur)) {
+      setField(rec, fieldName, fixDateFormat(cur, refDate), `Date was not YYYYMMDD — corrected`);
+    }
+    if (rule.type === 'date' && rule.minDate && cur <= rule.minDate) {
+      setField(rec, fieldName, '19800101', `Date <= ${rule.minDate} — set to 1980-01-01`);
+    }
+
+    // Numeric / negative
+    if ((rule.type === 'number' || rule.type === 'integer')) {
+      const n = Number(cur);
+      if (isNaN(n)) {
+        setField(rec, fieldName, '0', `Non-numeric value — reset to 0`);
+      } else if (rule.minVal !== undefined && n < rule.minVal) {
+        setField(rec, fieldName, String(Math.abs(n)), `Negative value not allowed — flipped to positive`);
+      }
+    }
+
+    // Length
+    if (rule.length && String(cur).length !== rule.length) {
+      if (fieldName === 'ProviderCode') {
+        setField(rec, fieldName, headerProvider && headerProvider.length === 10 ? headerProvider : 'BSP0000006',
+          `ProviderCode must be 10 chars — replaced`);
+      }
+    }
+    if (rule.maxLen && String(cur).length > rule.maxLen) {
+      setField(rec, fieldName, String(cur).slice(0, rule.maxLen), `Truncated to ${rule.maxLen} chars`);
+    }
+
+    // TIN
+    if (rule.tinFormat && !/^\d{9,12}$/.test(cur)) {
+      setField(rec, fieldName, String(r(100000000000, 999999999999)), `Invalid TIN format — generated valid 12-digit TIN`);
+    }
+  }
+
+  // -------- Apply field-level fixes for every record --------
+  // Two passes: first fills unconditional mandatories + sets phase/type values
+  // Second pass evaluates conditional-mandatories with dependencies in place.
+  records.forEach(rec => {
+    const def = RECORD_DEFS[rec.recordType];
+    if (!def) return;
+    Object.entries(def.fields).forEach(([fname, rule]) => fixField(rec, fname, rule));
+  });
+  // Second pass — same fields, now that conditional dependencies are populated
+  records.forEach(rec => {
+    const def = RECORD_DEFS[rec.recordType];
+    if (!def) return;
+    Object.entries(def.fields).forEach(([fname, rule]) => fixField(rec, fname, rule));
+  });
+
+  // -------- Record-specific dependency fixes --------
+  records.filter(r => r.recordType === 'Individuals').forEach(rec => {
+    const hasFL = rec.attrs.FirstName && rec.attrs.LastName;
+    const hasFull = !!rec.attrs.FullName;
+    if (!hasFL && !hasFull) {
+      setField(rec, 'FirstName', 'JUAN', 'Filled to satisfy name dependency rule');
+      setField(rec, 'LastName', 'DELA CRUZ', 'Filled to satisfy name dependency rule');
+    }
+    // Address dependency
+    const hasParsed = rec.attrs.PermanentStreetNo && rec.attrs.PermanentCity && rec.attrs.PermanentProvince && rec.attrs.PermanentCountry;
+    if (!hasParsed && !rec.attrs.PermanentFullAddress) {
+      setField(rec, 'PermanentFullAddress', '123 RIZAL STREET, MANILA, PH', 'Permanent address required');
+    }
+  });
+
+  // -------- Logical: ContractStartDate > ContractPlannedEndDate --------
+  records.forEach(rec => {
+    if (!['Installments','NonInstallments','CreditCards'].includes(rec.recordType)) return;
+    const sd = rec.attrs.ContractStartDate;
+    const ep = rec.attrs.ContractPlannedEndDate;
+    if (sd && ep && isYMD(sd) && isYMD(ep) && sd > ep) {
+      // Push planned end 5 years past the start
+      const newEnd = String(parseInt(sd.slice(0, 4), 10) + 5) + sd.slice(4);
+      setField(rec, 'ContractPlannedEndDate', newEnd, 'StartDate was after PlannedEnd — pushed PlannedEnd +5 years');
+    }
+    // Phase CL/CA needs ActualEnd
+    if (['CL','CA'].includes(rec.attrs.ContractPhase) && !rec.attrs.ContractActualEndDate) {
+      setField(rec, 'ContractActualEndDate', refDate, `ActualEndDate required for phase ${rec.attrs.ContractPhase}`);
+    }
+  });
+
+  // -------- Stage 3: Duplicate ProviderSubjectNumber --------
+  const seen = new Map();
+  records.forEach(rec => {
+    if (rec.recordType !== 'Individuals' && rec.recordType !== 'Companies') return;
+    const psn = rec.attrs.ProviderSubjectNumber;
+    if (!psn) return;
+    if (seen.has(psn)) {
+      let suffix = 1;
+      let unique = psn + '_DUP' + suffix;
+      while (seen.has(unique)) { suffix++; unique = psn + '_DUP' + suffix; }
+      setField(rec, 'ProviderSubjectNumber', unique, 'Duplicate ProviderSubjectNumber — appended unique suffix');
+      seen.set(unique, rec.line);
+    } else {
+      seen.set(psn, rec.line);
+    }
+  });
+
+  // -------- Stage 3: Contract referencing a missing subject --------
+  const allSubjects = new Set([...seen.keys()]);
+  // If there are zero subjects in file, add a sample individual so contracts have a target
+  if (allSubjects.size === 0) {
+    const newPSN = 'SUBJ_AUTOFILL_001';
+    const newRec = {
+      recordType: 'Individuals',
+      line: 0,
+      attrs: {
+        ProviderCode: headerProvider || 'BSP0000006',
+        BranchCode: 'B0001',
+        SubjectReferenceDate: refDate,
+        ProviderSubjectNumber: newPSN,
+        Title: '10', FirstName: 'JUAN', LastName: 'AUTOFILL',
+        Gender: 'M', BirthDate: '19800101',
+        BirthPlace: 'MANILA', BirthCountry: 'PH',
+        Nationality: 'PH', Resident: '1', CivilStatus: '1',
+        MotherMaidenFullName: 'AUTOFILL',
+        PermanentFullAddress: '123 AUTOFILL ST, MANILA, PH',
+        TIN: String(r(100000000000, 999999999999))
+      }
+    };
+    records.push(newRec);
+    allSubjects.add(newPSN);
+    logChange(0, 'Individuals', 'ProviderSubjectNumber', '',  newPSN,
+      'No subject existed — added autofill subject so contracts have a target');
+  }
+
+  // Now redirect orphan contracts to first available subject
+  const fallbackSubj = [...allSubjects][0];
+  ['Installments','NonInstallments','CreditCards','OtherCreditAccomodations','Investments','OffBalanceSheets'].forEach(rt => {
+    records.filter(r => r.recordType === rt).forEach(rec => {
+      if (rec.attrs.ProviderSubjectNo && !allSubjects.has(rec.attrs.ProviderSubjectNo)) {
+        setField(rec, 'ProviderSubjectNo', fallbackSubj,
+          `Subject not in file — re-pointed to first existing subject`);
+      }
+    });
+  });
+
+  // -------- Stage 3: duplicate ProviderContractNo + RefDate --------
+  const cseen = new Map();
+  ['Installments','NonInstallments','CreditCards','OtherCreditAccomodations','Investments','OffBalanceSheets'].forEach(rt => {
+    records.filter(r => r.recordType === rt).forEach(rec => {
+      if (!rec.attrs.ProviderContractNo) return;
+      const key = rec.attrs.ProviderContractNo + '|' + (rec.attrs.ContractRefDate || '');
+      if (cseen.has(key)) {
+        let s = 1;
+        let unique = rec.attrs.ProviderContractNo + '_DUP' + s;
+        while (cseen.has(unique + '|' + (rec.attrs.ContractRefDate || ''))) { s++; unique = rec.attrs.ProviderContractNo + '_DUP' + s; }
+        setField(rec, 'ProviderContractNo', unique, 'Duplicate ProviderContractNo — appended unique suffix');
+        cseen.set(unique + '|' + (rec.attrs.ContractRefDate || ''), rec.line);
+      } else {
+        cseen.set(key, rec.line);
+      }
+    });
+  });
+
+  // -------- Company link: parent==child --------
+  records.filter(r => r.recordType === 'CompanyLinks').forEach(rec => {
+    if (rec.attrs.ParentProviderSubjectNo && rec.attrs.ParentProviderSubjectNo === rec.attrs.ChildProviderSubjectNo) {
+      setField(rec, 'ChildProviderSubjectNo', rec.attrs.ChildProviderSubjectNo + '_CHILD',
+        'Parent and Child cannot be the same — modified Child');
+    }
+    // Ensure parent and child both exist
+    if (rec.attrs.ParentProviderSubjectNo && !allSubjects.has(rec.attrs.ParentProviderSubjectNo)) {
+      setField(rec, 'ParentProviderSubjectNo', fallbackSubj, `Parent not in file — re-pointed`);
+    }
+    if (rec.attrs.ChildProviderSubjectNo && !allSubjects.has(rec.attrs.ChildProviderSubjectNo) &&
+        rec.attrs.ChildProviderSubjectNo !== rec.attrs.ParentProviderSubjectNo) {
+      // Find a different subject if available
+      const others = [...allSubjects].filter(s => s !== rec.attrs.ParentProviderSubjectNo);
+      if (others.length > 0) {
+        setField(rec, 'ChildProviderSubjectNo', others[0], `Child not in file — re-pointed`);
+      }
+    }
+  });
+
+  // -------- Recompute Header counts --------
+  const header = records.find(r => r.recordType === 'Header');
+  const footer = records.find(r => r.recordType === 'Footer');
+  const subjCount = records.filter(r => r.recordType === 'Individuals' || r.recordType === 'Companies').length;
+  const contractCount = records.filter(r => ['Installments','NonInstallments','CreditCards','OtherCreditAccomodations','Investments','OffBalanceSheets'].includes(r.recordType)).length;
+  const negCount = records.filter(r => r.recordType === 'SubjectNegativeEvents').length;
+
+  if (header) {
+    if (header.attrs.TotalSubjectRecords !== String(subjCount))
+      setField(header, 'TotalSubjectRecords', String(subjCount), 'Recalculated from records');
+    if (header.attrs.TotalContractRecords !== String(contractCount))
+      setField(header, 'TotalContractRecords', String(contractCount), 'Recalculated from records');
+    if (header.attrs.TotalNegativeEventRecords !== String(negCount))
+      setField(header, 'TotalNegativeEventRecords', String(negCount), 'Recalculated from records');
+    if (!header.attrs.ProviderCode || header.attrs.ProviderCode.length !== 10) {
+      setField(header, 'ProviderCode', 'BSP0000006', 'ProviderCode normalized to 10 chars');
+    }
+    if (!header.attrs.FileReferenceDate || !isYMD(header.attrs.FileReferenceDate)) {
+      setField(header, 'FileReferenceDate', refDate, 'FileReferenceDate normalized');
+    }
+  }
+
+  if (footer) {
+    const totalRecords = records.length; // includes HD + FT
+    if (footer.attrs.NumberOfRecords !== String(totalRecords)) {
+      setField(footer, 'NumberOfRecords', String(totalRecords), 'Recalculated total record count');
+    }
+    if (header && footer.attrs.FileReferenceDate !== header.attrs.FileReferenceDate) {
+      setField(footer, 'FileReferenceDate', header.attrs.FileReferenceDate, 'Synced with Header');
+    }
+    if (header && footer.attrs.ProviderCode !== header.attrs.ProviderCode) {
+      setField(footer, 'ProviderCode', header.attrs.ProviderCode, 'Synced with Header');
+    }
+  }
+
+  // Normalize ProviderCode across all records to match header
+  const finalPC = header?.attrs.ProviderCode;
+  if (finalPC && finalPC.length === 10) {
+    records.forEach(rec => {
+      if (rec.recordType === 'Header' || rec.recordType === 'Footer') return;
+      if (rec.attrs.ProviderCode && rec.attrs.ProviderCode !== finalPC) {
+        setField(rec, 'ProviderCode', finalPC, 'Synced ProviderCode with Header');
+      }
+    });
+  }
+
+  // -------- Rebuild XML --------
+  const fixedXml = recordsToXml(records);
+  const fixedTxt = recordsToTxt(records);
+
+  return {
+    records,
+    changes,
+    fixedXml,
+    fixedTxt
+  };
+}
+
+function recordsToXml(records) {
+  function escapeAttr(v) {
+    return String(v ?? '').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;');
+  }
+  function attrStr(attrs) {
+    return Object.entries(attrs)
+      .filter(([k]) => !k.startsWith('_'))
+      .map(([k, v]) => `${k}="${escapeAttr(v)}"`).join(' ');
+  }
+
+  const header = records.find(r => r.recordType === 'Header');
+  const footer = records.find(r => r.recordType === 'Footer');
+  const body = records.filter(r => r.recordType !== 'Header' && r.recordType !== 'Footer');
+
+  const lines = [];
+  lines.push('<?xml version="1.0" encoding="UTF-8"?>');
+  lines.push('<!-- Auto-fixed by Eeejay COCREE Checker · SANDBOX USE ONLY · dev by Bongzkie -->');
+  lines.push('<CRIMS_Submission_Input xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="CRIMSPhilippines_Submission_input_only.xsd">');
+  if (header) lines.push(`  <Header ${attrStr(header.attrs)}/>`);
+  lines.push('  <Body>');
+  // Group: subjects, links, contracts, negatives — keep stable order
+  const groupOrder = ['Individuals','Companies','CompanyLinks','Installments','NonInstallments','CreditCards','OtherCreditAccomodations','Investments','OffBalanceSheets','SubjectNegativeEvents'];
+  groupOrder.forEach(gt => {
+    body.filter(r => r.recordType === gt).forEach(r => {
+      lines.push(`    <${gt} ${attrStr(r.attrs)}/>`);
+    });
+  });
+  lines.push('  </Body>');
+  if (footer) lines.push(`  <Footer ${attrStr(footer.attrs)}/>`);
+  lines.push('</CRIMS_Submission_Input>');
+  return lines.join('\n');
+}
+
+function recordsToTxt(records) {
+  const tagToCode = {
+    Header: 'HD', Footer: 'FT',
+    Individuals: 'ID', Companies: 'BD', CompanyLinks: 'SL',
+    Installments: 'CI', NonInstallments: 'CN', CreditCards: 'CC',
+    OtherCreditAccomodations: 'CA', Investments: 'CV', OffBalanceSheets: 'CF',
+    SubjectNegativeEvents: 'NE'
+  };
+  const lines = [];
+  records.forEach(rec => {
+    const code = tagToCode[rec.recordType];
+    if (!code) return;
+    const vals = Object.entries(rec.attrs).filter(([k]) => !k.startsWith('_')).map(([_, v]) => v ?? '');
+    lines.push([code, ...vals].join('|'));
+  });
+  return lines.join('\n');
+}
+
+/* =====================================================================
+   UI: tab switching
+   ===================================================================== */
+$$('.tab').forEach(t => {
+  t.addEventListener('click', () => {
+    $$('.tab').forEach(x => x.classList.remove('active'));
+    t.classList.add('active');
+    $$('.tab-pane').forEach(p => p.classList.add('hidden'));
+    $('#tab-' + t.dataset.tab).classList.remove('hidden');
+  });
+});
+
+/* =====================================================================
+   UI: validator
+   ===================================================================== */
+const dz = $('#dropzone');
+const fileInput = $('#fileInput');
+
+['dragenter','dragover'].forEach(e => dz.addEventListener(e, ev => {
+  ev.preventDefault(); dz.classList.add('drag');
+}));
+['dragleave','drop'].forEach(e => dz.addEventListener(e, ev => {
+  ev.preventDefault(); dz.classList.remove('drag');
+}));
+dz.addEventListener('drop', ev => {
+  if (ev.dataTransfer.files[0]) handleFile(ev.dataTransfer.files[0]);
+});
+fileInput.addEventListener('change', ev => {
+  if (ev.target.files[0]) handleFile(ev.target.files[0]);
+});
+
+function handleFile(file) {
+  CURRENT_FILE = file;
+  $('#dzText').textContent = '✓ ' + file.name;
+  $('#dzSub').textContent = `${(file.size / 1024).toFixed(1)} KB · click "Run Validation"`;
+  const reader = new FileReader();
+  reader.onload = e => {
+    CURRENT_TEXT = e.target.result;
+    $('#btnValidate').disabled = false;
+  };
+  reader.readAsText(file, 'UTF-8');
+}
+
+$('#btnValidate').addEventListener('click', () => {
+  if (!CURRENT_TEXT) return;
+  const parsed = parseFile(CURRENT_TEXT, CURRENT_FILE?.name || '');
+  CURRENT_RECORDS = parsed.records;
+  CURRENT_FINDINGS = validateAll(parsed, CURRENT_FILE?.name || '');
+  renderResults(parsed);
+});
+
+$('#btnLoadSample').addEventListener('click', () => {
+  // Build a small intentionally-broken sample so users can see findings
+  const today = todayYMD();
+  const sample = `<?xml version="1.0" encoding="UTF-8"?>
+<CRIMS_Submission_Input xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="CRIMSPhilippines_Submission_input_only.xsd">
+  <Header ProviderCode="BSP0000006" FileReferenceDate="${today}" Version="1.0" SubmissionType="0" TotalSubjectRecords="2" TotalContractRecords="1" TotalNegativeEventRecords="0" ProviderComments="DEMO-FILE-WITH-ERRORS"/>
+  <Body>
+    <Individuals ProviderCode="BSP0000006" BranchCode="B0001" SubjectReferenceDate="${today}" ProviderSubjectNumber="DEMO_SUBJ_001" Title="10" FirstName="" LastName="" FullName="" Gender="X" BirthDate="80-15-1990" BirthPlace="MANILA" BirthCountry="PH" Nationality="ZZ" Resident="1" CivilStatus="2" MotherMaidenFullName="GARCIA" PermanentFullAddress="123 RIZAL ST" TIN="123" />
+    <Individuals ProviderCode="BSP0000006" BranchCode="B0001" SubjectReferenceDate="${today}" ProviderSubjectNumber="DEMO_SUBJ_001" Title="10" FirstName="MARIA" LastName="REYES" Gender="F" BirthDate="19850102" BirthPlace="CEBU" BirthCountry="PH" Nationality="PH" Resident="1" CivilStatus="1" MotherMaidenFullName="CRUZ" PermanentFullAddress="456 LAPU ST" TIN="987654321987" />
+    <Installments ProviderCode="BSP0000006" BranchCode="B0001" ContractRefDate="${today}" ProviderSubjectNo="DEMO_SUBJ_999" Role="B" DOSRI="0" RPT="0" ProviderContractNo="CTR_001" ContractType="13" ContractPhase="AC" ContractStatus="NN" RegulatoryStatus="CR" OriginalCurrency="USD" ContractStartDate="20240101" ContractPlannedEndDate="20231231" BookType="B" FinancedAmount="-500" FinancedAmountOriginalCurrency="500" InstallmentsNumber="24" CreditPurpose="10" PaymentPeriodicity="M" />
+  </Body>
+  <Footer ProviderCode="BSP0000006" FileReferenceDate="${today}" NumberOfRecords="5"/>
+</CRIMS_Submission_Input>`;
+  CURRENT_TEXT = sample;
+  CURRENT_FILE = { name: 'BSP0000006_CSDF_' + today + '120000.xml', size: sample.length };
+  $('#dzText').textContent = '✓ Sample file loaded (intentionally broken)';
+  $('#dzSub').textContent = `${(sample.length / 1024).toFixed(1)} KB · click "Run Validation"`;
+  $('#btnValidate').disabled = false;
+});
+
+$('#btnClear').addEventListener('click', () => {
+  CURRENT_FILE = null; CURRENT_TEXT = ''; CURRENT_RECORDS = []; CURRENT_FINDINGS = [];
+  FIXED_OUTPUT = ''; FIXED_FILENAME = ''; FIX_CHANGES = [];
+  $('#dzText').textContent = 'Drop COCREE 2.0 file here';
+  $('#dzSub').textContent = 'or click to browse · accepts .xml, .txt (UTF-8)';
+  $('#fileInput').value = '';
+  $('#btnValidate').disabled = true;
+  $('#btnExportErrors').disabled = true;
+  $('#btnAutoFix').disabled = true;
+  $('#resultsArea').classList.add('hidden');
+  $('#fixPanel').classList.add('hidden');
+});
+
+function renderResults(parsed) {
+  $('#resultsArea').classList.remove('hidden');
+  $('#stFile').textContent = CURRENT_FILE?.name || '—';
+  $('#stRecords').textContent = parsed.records.length;
+  const errs = CURRENT_FINDINGS.filter(f => f.severity === 'error').length;
+  const warns = CURRENT_FINDINGS.filter(f => f.severity === 'warning').length;
+  $('#stErrors').textContent = errs;
+  $('#stWarnings').textContent = warns;
+  $('#stStatus').textContent = errs === 0 ? (warns === 0 ? 'PASSED' : 'PASS+W') : 'FAILED';
+  $('#stStatus').style.color = errs === 0 ? (warns === 0 ? 'var(--green)' : 'var(--amber)') : '#ff6b66';
+  $('#btnExportErrors').disabled = CURRENT_FINDINGS.length === 0;
+  $('#btnAutoFix').disabled = CURRENT_FINDINGS.length === 0;
+  renderFindings();
+}
+
+function renderFindings() {
+  const list = $('#errList');
+  let f = CURRENT_FINDINGS;
+
+  if (CURRENT_FILTER === 'stage1') f = f.filter(x => x.stage === 1);
+  if (CURRENT_FILTER === 'stage2') f = f.filter(x => x.stage === 2);
+  if (CURRENT_FILTER === 'stage3') f = f.filter(x => x.stage === 3);
+  if (CURRENT_FILTER === 'error') f = f.filter(x => x.severity === 'error');
+  if (CURRENT_FILTER === 'warning') f = f.filter(x => x.severity === 'warning');
+
+  if (CURRENT_SEARCH) {
+    const s = CURRENT_SEARCH.toLowerCase();
+    f = f.filter(x =>
+      (x.field || '').toLowerCase().includes(s) ||
+      (x.code || '').toLowerCase().includes(s) ||
+      (x.message || '').toLowerCase().includes(s) ||
+      (x.recordType || '').toLowerCase().includes(s));
+  }
+
+  if (f.length === 0) {
+    list.innerHTML = `<div class="empty"><div class="ascii">✓</div><div>No findings match this filter</div></div>`;
+    return;
+  }
+
+  list.innerHTML = f.map(x => `
+    <div class="err-row severity-${x.severity}">
+      <div class="ln">L${x.line || '—'}</div>
+      <div class="stage">S${x.stage}·${x.severity === 'error' ? 'ERR' : 'WRN'}</div>
+      <div class="code">${escapeHtml(x.code)}</div>
+      <div class="msg">
+        <span class="field">${escapeHtml(x.recordType)} → ${escapeHtml(x.field)}</span>
+        <span class="ctx">${escapeHtml(x.message)}${x.value ? ' · value: <strong>' + escapeHtml(x.value) + '</strong>' : ''}</span>
+      </div>
+    </div>
+  `).join('');
+}
+
+$$('.chip[data-filter]').forEach(c => {
+  c.addEventListener('click', () => {
+    $$('.chip[data-filter]').forEach(x => x.classList.remove('active'));
+    c.classList.add('active');
+    CURRENT_FILTER = c.dataset.filter;
+    renderFindings();
+  });
+});
+$('#errSearch').addEventListener('input', e => {
+  CURRENT_SEARCH = e.target.value;
+  renderFindings();
+});
+
+$('#btnExportErrors').addEventListener('click', () => {
+  const rows = [['Stage','Severity','ErrorCode','Line','RecordType','Field','Message','OffendingValue']];
+  CURRENT_FINDINGS.forEach(f => {
+    rows.push([f.stage, f.severity, f.code, f.line, f.recordType, f.field, f.message, f.value || '']);
+  });
+  const csv = rows.map(r => r.map(c => `"${String(c ?? '').replace(/"/g,'""')}"`).join(',')).join('\n');
+  download(csv, 'cocree_validation_report.csv', 'text/csv');
+  toast('Exported error report');
+});
+
+/* =====================================================================
+   UI: auto-fix handlers
+   ===================================================================== */
+$('#btnAutoFix').addEventListener('click', () => {
+  if (!CURRENT_TEXT) return;
+  const parsed = parseFile(CURRENT_TEXT, CURRENT_FILE?.name || '');
+  const fix = autoFixFile(parsed, CURRENT_FINDINGS, CURRENT_FILE?.name || 'corrected.xml');
+  FIXED_OUTPUT = fix.fixedXml;
+  FIX_CHANGES = fix.changes;
+
+  const baseName = (CURRENT_FILE?.name || 'corrected.xml').replace(/\.(xml|txt)$/i, '');
+  FIXED_FILENAME = `${baseName}_FIXED_SANDBOX.xml`;
+
+  // Re-validate the fixed file
+  const reparsed = parseFile(FIXED_OUTPUT, FIXED_FILENAME);
+  const reFindings = validateAll(reparsed, FIXED_FILENAME);
+  const remainErrs = reFindings.filter(f => f.severity === 'error').length;
+  const remainWarns = reFindings.filter(f => f.severity === 'warning').length;
+
+  // Show panel
+  $('#fixPanel').classList.remove('hidden');
+  const banner = $('#fixBanner');
+  if (remainErrs === 0) {
+    banner.className = 'fix-banner';
+    banner.innerHTML = `<strong>✓ Auto-fix complete.</strong> Applied <strong>${fix.changes.length}</strong> change${fix.changes.length === 1 ? '' : 's'}. The corrected file passes all validation rules${remainWarns > 0 ? ` (${remainWarns} non-blocking warning${remainWarns === 1 ? '' : 's'})` : ''}.<br/>` +
+      `<span style="opacity:0.65; font-size:11px; margin-top:4px; display:inline-block;">⚠ SANDBOX ONLY — autofilled values are placeholders, do not submit as live regulatory data.</span>`;
+  } else {
+    banner.className = 'fix-banner warn';
+    banner.innerHTML = `<strong>⚠ Partial fix.</strong> Applied <strong>${fix.changes.length}</strong> change${fix.changes.length === 1 ? '' : 's'} but ${remainErrs} error${remainErrs === 1 ? ' remains' : 's remain'} that need manual review (likely non-mandatory business-content checks).<br/>` +
+      `<span style="opacity:0.65; font-size:11px; margin-top:4px; display:inline-block;">⚠ SANDBOX ONLY — autofilled values are placeholders, do not submit as live regulatory data.</span>`;
+  }
+
+  renderFixList();
+  $('#fixedPreview').classList.add('hidden');
+  // Scroll into view
+  $('#fixPanel').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  toast(`Auto-fixed ${fix.changes.length} field${fix.changes.length === 1 ? '' : 's'}`);
+});
+
+function renderFixList() {
+  const list = $('#fixList');
+  if (FIX_CHANGES.length === 0) {
+    list.innerHTML = `<div class="empty"><div class="ascii">✓</div><div>No fixes were needed</div></div>`;
+    return;
+  }
+  list.innerHTML = FIX_CHANGES.map(c => `
+    <div class="fix-row">
+      <div class="ln">L${c.line || '—'}</div>
+      <div class="field">${escapeHtml(c.recordType)}<br/><span style="color:var(--paper-2); font-weight:400; font-size:10px;">${escapeHtml(c.field)}</span></div>
+      <div class="change">
+        ${c.from ? `<span class="from">${escapeHtml(c.from.length > 50 ? c.from.slice(0, 47) + '…' : c.from)}</span><span class="arrow">→</span>` : '<span class="arrow">+</span>'}<span class="to">${escapeHtml(c.to.length > 50 ? c.to.slice(0, 47) + '…' : c.to)}</span>
+        <span class="reason">${escapeHtml(c.reason)}</span>
+      </div>
+    </div>
+  `).join('');
+}
+
+$('#btnDownloadFixed').addEventListener('click', () => {
+  if (!FIXED_OUTPUT) { toast('Run Auto-Fix first'); return; }
+  download(FIXED_OUTPUT, FIXED_FILENAME, 'application/xml');
+});
+
+$('#btnDownloadFixedTxt').addEventListener('click', () => {
+  if (!FIXED_OUTPUT) { toast('Run Auto-Fix first'); return; }
+  // Re-parse the fixed XML and convert to TXT
+  const reparsed = parseFile(FIXED_OUTPUT, FIXED_FILENAME);
+  const txt = recordsToTxt(reparsed.records);
+  const txtName = FIXED_FILENAME.replace(/\.xml$/i, '.txt');
+  download(txt, txtName, 'text/plain');
+});
+
+$('#btnRevalidate').addEventListener('click', () => {
+  if (!FIXED_OUTPUT) { toast('Run Auto-Fix first'); return; }
+  CURRENT_TEXT = FIXED_OUTPUT;
+  CURRENT_FILE = { name: FIXED_FILENAME, size: FIXED_OUTPUT.length };
+  $('#dzText').textContent = '✓ ' + FIXED_FILENAME;
+  $('#dzSub').textContent = `${(FIXED_OUTPUT.length / 1024).toFixed(1)} KB · re-validating fixed file`;
+  $('#btnValidate').disabled = false;
+  // Auto-trigger
+  const parsed = parseFile(CURRENT_TEXT, CURRENT_FILE.name);
+  CURRENT_RECORDS = parsed.records;
+  CURRENT_FINDINGS = validateAll(parsed, CURRENT_FILE.name);
+  renderResults(parsed);
+  $('#fixPanel').classList.add('hidden');
+  toast('Re-validated fixed file');
+});
+
+$('#btnViewFixedFile').addEventListener('click', () => {
+  if (!FIXED_OUTPUT) { toast('Run Auto-Fix first'); return; }
+  const pv = $('#fixedPreview');
+  if (pv.classList.contains('hidden')) {
+    pv.innerHTML = highlightXml(FIXED_OUTPUT);
+    pv.classList.remove('hidden');
+  } else {
+    pv.classList.add('hidden');
+  }
+});
+
+/* =====================================================================
+   UI: generator
+   ===================================================================== */
+$('#genRefDate').value = todayYMD();
+
+$('#btnGenerate').addEventListener('click', () => {
+  const opts = {
+    provider: $('#genProvider').value.trim(),
+    refDate: $('#genRefDate').value.trim(),
+    branch: $('#genBranch').value.trim(),
+    subType: $('#genSubType').value,
+    ID: $('#g_ID').checked, BD: $('#g_BD').checked,
+    CI: $('#g_CI').checked, CN: $('#g_CN').checked,
+    CC: $('#g_CC').checked, CA: $('#g_CA').checked,
+    CV: $('#g_CV').checked, CF: $('#g_CF').checked,
+    NE: $('#g_NE').checked, SL: $('#g_SL').checked
+  };
+  const data = generateSampleData(opts);
+  const fmt = $('#genFormat').value;
+  GENERATED_OUTPUT = fmt === 'xml' ? buildXml(data) : buildTxt(data);
+  GENERATED_FILENAME = `${opts.provider}_CSDF_${opts.refDate}120000.${fmt}`;
+  $('#genPreview').innerHTML = highlightXml(GENERATED_OUTPUT);
+  toast('Sample generated');
+});
+
+$('#btnDownloadGen').addEventListener('click', () => {
+  if (!GENERATED_OUTPUT) { toast('Generate first'); return; }
+  download(GENERATED_OUTPUT, GENERATED_FILENAME, $('#genFormat').value === 'xml' ? 'application/xml' : 'text/plain');
+});
+
+$('#btnCopyGen').addEventListener('click', () => {
+  if (!GENERATED_OUTPUT) { toast('Generate first'); return; }
+  navigator.clipboard.writeText(GENERATED_OUTPUT).then(() => toast('Copied to clipboard'));
+});
+
+$('#btnSendToValidator').addEventListener('click', () => {
+  if (!GENERATED_OUTPUT) { toast('Generate first'); return; }
+  CURRENT_TEXT = GENERATED_OUTPUT;
+  CURRENT_FILE = { name: GENERATED_FILENAME, size: GENERATED_OUTPUT.length };
+  $$('.tab').forEach(t => t.classList.remove('active'));
+  $$('.tab-pane').forEach(p => p.classList.add('hidden'));
+  $$('.tab')[0].classList.add('active');
+  $('#tab-validator').classList.remove('hidden');
+  $('#dzText').textContent = '✓ ' + GENERATED_FILENAME;
+  $('#dzSub').textContent = 'from generator · click Run Validation';
+  $('#btnValidate').disabled = false;
+  toast('Sent to validator');
+});
+
+function download(content, filename, type) {
+  const blob = new Blob([content], { type });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = filename;
+  a.click();
+  setTimeout(() => URL.revokeObjectURL(a.href), 100);
+}
+</script>
+</body>
+</html>
